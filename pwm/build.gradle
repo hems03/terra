@@ -37,4 +37,7 @@ android {
 
 dependencies {
     provided 'com.google.android.things:androidthings:0.4-devpreview'
+    implementation 'com.google.android.gms:play-services:11.0.4'
+    provided 'com.google.android.things:androidthings:0.2-devpreview'
+    compile 'com.google.android.gms:play-services-nearby:11.0.4'
 }

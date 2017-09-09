@@ -17,10 +17,30 @@
 package com.example.androidthings.simplepio;
 
 import android.app.Activity;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.connection.AdvertisingOptions;
+import com.google.android.gms.nearby.connection.ConnectionInfo;
+import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
+import com.google.android.gms.nearby.connection.ConnectionResolution;
+import com.google.android.gms.nearby.connection.Connections;
+import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
+import com.google.android.gms.nearby.connection.DiscoveryOptions;
+import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
+import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.things.pio.PeripheralManagerService;
 import com.google.android.things.pio.Pwm;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -30,7 +50,9 @@ import java.io.IOException;
  * {@link #INTERVAL_BETWEEN_STEPS_MS}.
  *
  */
-public class PWMActivity extends Activity {
+public class PWMActivity extends Activity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = PWMActivity.class.getSimpleName();
 
     // Parameters of the servo PWM
@@ -47,10 +69,41 @@ public class PWMActivity extends Activity {
     private boolean mIsPulseIncreasing = true;
     private double mActivePulseDuration;
 
+    private GoogleApiClient mGoogleApiClient;
+    private ConnectionLifecycleCallback mConnectionLC;
+    private ConnectivityManager connectivityManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "Starting PWMActivity");
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Nearby.CONNECTIONS_API)
+                .build();
+        mGoogleApiClient.connect();
+        mConnectionLC=new ConnectionLifecycleCallback() {
+            @Override
+            public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
+                Log.d(TAG,s);
+            }
+
+            @Override
+            public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
+                Log.d(TAG,s);
+            }
+
+            @Override
+            public void onDisconnected(String s) {
+                Log.d(TAG,s);
+            }
+        };
+
+        connectivityManager= (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+
+
 
         PeripheralManagerService service = new PeripheralManagerService();
         try {
@@ -133,4 +186,103 @@ public class PWMActivity extends Activity {
         }
     };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d(TAG,"API Client connected");
+        startAdvertising();
+        startDiscovery();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private boolean isConnectedToNetwork() {
+
+        NetworkInfo info = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo info1 = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
+
+        return (info != null && info.isConnectedOrConnecting()) || (info1 != null && info1.isConnectedOrConnecting());
+    }
+
+    private void startAdvertising() {
+        /*(if (!isConnectedToNetwork()) {
+            Log.d(TAG, "startAdvertising: not connected to WiFi network.");
+            return;
+        }*/
+        Nearby.Connections.startAdvertising(
+                mGoogleApiClient,
+                "Hello",
+                "1010",
+                mConnectionLC,
+                new AdvertisingOptions(Strategy.P2P_STAR))
+                .setResultCallback(
+                        new ResultCallback<Connections.StartAdvertisingResult>() {
+                            @Override
+                            public void onResult(@NonNull Connections.StartAdvertisingResult result) {
+                                Log.d(TAG,result.getStatus().getStatus().toString());
+                                if (result.getStatus().isSuccess()) {
+                                    // We're advertising!
+                                    Log.d(TAG,"Starting to advertise");
+                                } else {
+                                    // We were unable to start advertising.
+                                }
+                            }
+                        });
+    }
+
+    private final EndpointDiscoveryCallback mEndpointDiscoveryCallback =
+            new EndpointDiscoveryCallback() {
+                @Override
+                public void onEndpointFound(
+                        String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
+                    // An endpoint was found!
+
+                    Log.d(TAG,endpointId);
+                }
+
+                @Override
+                public void onEndpointLost(String endpointId) {
+                    // A previously discovered endpoint has gone away.
+                }
+            };
+
+    private void startDiscovery() {
+        Nearby.Connections.startDiscovery(
+                mGoogleApiClient,
+                "1010",
+                mEndpointDiscoveryCallback,
+                new DiscoveryOptions(Strategy.P2P_STAR))
+                .setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(@NonNull Status status) {
+                                if (status.isSuccess()) {
+                                    Log.d(TAG,"Starting Discovery");
+                                } else {
+                                    // We were unable to start discovering.
+                                }
+                            }
+                        });
+    }
 }
