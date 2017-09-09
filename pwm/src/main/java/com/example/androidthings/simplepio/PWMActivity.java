@@ -75,6 +75,7 @@ public class PWMActivity extends Activity implements
     private Pwm mPwm;
     private boolean mIsPulseIncreasing = true;
     private double mActivePulseDuration;*/
+    private boolean mDidPing;
 
     private GoogleApiClient mGoogleApiClient;
     private ConnectionLifecycleCallback mConnectionLC;
@@ -88,6 +89,7 @@ public class PWMActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mVisitedIds=new ArrayList<>();
+        mDidPing=false;
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -157,6 +159,7 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
+        startDiscovery();
     }
 
     @Override
@@ -249,6 +252,8 @@ public class PWMActivity extends Activity implements
                 public void onEndpointFound(
                         final String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
                     // An endpoint was found!
+                    if(mDidPing)return;
+                    mDidPing=!mDidPing;
                     for(String id:mVisitedIds){
                         if(endpointId.equals(id)) return;
                     }
