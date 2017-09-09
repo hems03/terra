@@ -40,4 +40,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services:11.0.4'
     provided 'com.google.android.things:androidthings:0.2-devpreview'
     compile 'com.google.android.gms:play-services-nearby:11.0.4'
+    provided 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    compile 'com.google.dagger:dagger-android:2.11'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
+    compile 'com.google.dagger:dagger-android-support:2.11'
+    compile 'com.google.code.gson:gson:2.8.0'
 }

@@ -20,13 +20,14 @@ import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
 
+import com.example.androidthings.simplepio.model.ForwardRequest;
+import com.example.androidthings.simplepio.singleton.Singletons;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -46,21 +47,23 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.things.pio.PeripheralManagerService;
-import com.google.android.things.pio.Pwm;
+import com.google.gson.Gson;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
- * Sample usage of the PWM API that changes the PWM pulse width at a fixed interval defined in
- * {@link #INTERVAL_BETWEEN_STEPS_MS}.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class PWMActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = PWMActivity.class.getSimpleName();
+    private List<String> mVisitedIds;
 
     // Parameters of the servo PWM
-    private static final double MIN_ACTIVE_PULSE_DURATION_MS = 1;
+    /*private static final double MIN_ACTIVE_PULSE_DURATION_MS = 1;
     private static final double MAX_ACTIVE_PULSE_DURATION_MS = 2;
     private static final double PULSE_PERIOD_MS = 20;  // Frequency of 50Hz (1000/20)
 
@@ -71,7 +74,7 @@ public class PWMActivity extends Activity implements
     private Handler mHandler = new Handler();
     private Pwm mPwm;
     private boolean mIsPulseIncreasing = true;
-    private double mActivePulseDuration;
+    private double mActivePulseDuration;*/
 
     private GoogleApiClient mGoogleApiClient;
     private ConnectionLifecycleCallback mConnectionLC;
@@ -84,7 +87,7 @@ public class PWMActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "Starting PWMActivity");
+        mVisitedIds=new ArrayList<>();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -107,8 +110,12 @@ public class PWMActivity extends Activity implements
                 switch (connectionResolution.getStatus().getStatusCode()) {
                     case ConnectionsStatusCodes.STATUS_OK:
                         // We're connected! Can now start sending and receiving data.
+                        mVisitedIds.add(s);
+                        ForwardRequest request=new ForwardRequest(mVisitedIds);
+
+                        Gson gson=Singletons.getGson();
                         Nearby.Connections.
-                                sendPayload(mGoogleApiClient, s, Payload.fromBytes("Motherfuck".getBytes()));
+                                sendPayload(mGoogleApiClient, s, Payload.fromBytes(gson.toJson(request).getBytes()) );
                         break;
                     case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                         // The connection was rejected by one or both sides.
@@ -123,88 +130,14 @@ public class PWMActivity extends Activity implements
         };
 
         connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-
-
         PeripheralManagerService service = new PeripheralManagerService();
-        /*(try {
-            String pinName = BoardDefaults.getPWMPort();
-            mActivePulseDuration = MIN_ACTIVE_PULSE_DURATION_MS;
 
-            mPwm = service.openPwm(pinName);
-
-            // Always set frequency and initial duty cycle before enabling PWM
-            mPwm.setPwmFrequencyHz(1000 / PULSE_PERIOD_MS);
-            mPwm.setPwmDutyCycle(mActivePulseDuration);
-            mPwm.setEnabled(true);
-
-            // Post a Runnable that continuously change PWM pulse width, effectively changing the
-            // servo position
-            Log.d(TAG, "Start changing PWM pulse");
-            mHandler.post(mChangePWMRunnable);
-        } catch (IOException e) {
-            Log.e(TAG, "Error on PeripheralIO API", e);
-        }*/
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Remove pending Runnable from the handler.
-        mHandler.removeCallbacks(mChangePWMRunnable);
-        // Close the PWM port.
-        Log.i(TAG, "Closing port");
-        try {
-            mPwm.close();
-        } catch (IOException e) {
-            Log.e(TAG, "Error on PeripheralIO API", e);
-        } finally {
-            mPwm = null;
-        }
     }
-
-    private Runnable mChangePWMRunnable = new Runnable() {
-        @Override
-        public void run() {
-            // Exit Runnable if the port is already closed
-            if (mPwm == null) {
-                Log.w(TAG, "Stopping runnable since mPwm is null");
-                return;
-            }
-
-            // Change the duration of the active PWM pulse, but keep it between the minimum and
-            // maximum limits.
-            // The direction of the change depends on the mIsPulseIncreasing variable, so the pulse
-            // will bounce from MIN to MAX.
-            if (mIsPulseIncreasing) {
-                mActivePulseDuration += PULSE_CHANGE_PER_STEP_MS;
-            } else {
-                mActivePulseDuration -= PULSE_CHANGE_PER_STEP_MS;
-            }
-
-            // Bounce mActivePulseDuration back from the limits
-            if (mActivePulseDuration > MAX_ACTIVE_PULSE_DURATION_MS) {
-                mActivePulseDuration = MAX_ACTIVE_PULSE_DURATION_MS;
-                mIsPulseIncreasing = !mIsPulseIncreasing;
-            } else if (mActivePulseDuration < MIN_ACTIVE_PULSE_DURATION_MS) {
-                mActivePulseDuration = MIN_ACTIVE_PULSE_DURATION_MS;
-                mIsPulseIncreasing = !mIsPulseIncreasing;
-            }
-
-            Log.d(TAG, "Changing PWM active pulse duration to " + mActivePulseDuration + " ms");
-
-            try {
-
-                // Duty cycle is the percentage of active (on) pulse over the total duration of the
-                // PWM pulse
-                mPwm.setPwmDutyCycle(100 * mActivePulseDuration / PULSE_PERIOD_MS);
-
-                // Reschedule the same runnable in {@link #INTERVAL_BETWEEN_STEPS_MS} milliseconds
-                mHandler.postDelayed(this, INTERVAL_BETWEEN_STEPS_MS);
-            } catch (IOException e) {
-                Log.e(TAG, "Error on PeripheralIO API", e);
-            }
-        }
-    };
 
     @Override
     protected void onStart() {
@@ -224,7 +157,6 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-        startDiscovery();
     }
 
     @Override
@@ -245,20 +177,29 @@ public class PWMActivity extends Activity implements
         return (info != null && info.isConnectedOrConnecting()) || (info1 != null && info1.isConnectedOrConnecting());
     }
 
-
-
-    private void sendPayload(String endpointId, Payload payload) {
-        if (payload.getType() == Payload.Type.BYTES) {
-            // No need to track progress for bytes.
-            return;
-        }
-    }
-
     private final PayloadCallback mPayloadCallback =
             new PayloadCallback() {
                 @Override
                 public void onPayloadReceived(String endpointId, Payload payload) {
                     Log.d(TAG,new String(payload.asBytes()));
+                    String payloadString=new String(payload.asBytes());
+                    try{
+                        JSONObject jsonObject=new JSONObject(payloadString);
+                        switch (jsonObject.getString("type")){
+                            case "forward":{
+                                ForwardRequest forwardRequest= Singletons.getGson().fromJson(payloadString,ForwardRequest.class);
+                                mVisitedIds=forwardRequest.getPrevVisited();
+                                startDiscovery();
+                            }
+                            case "backward":{
+
+                            }
+                        }
+                    }catch (JSONException e){
+                        Log.d(TAG,e.getLocalizedMessage());
+                    }
+
+
                 }
 
                 @Override
@@ -294,13 +235,23 @@ public class PWMActivity extends Activity implements
                         });
     }
 
+
+
+
+
+
+
+
+
     private final EndpointDiscoveryCallback mEndpointDiscoveryCallback =
             new EndpointDiscoveryCallback() {
                 @Override
                 public void onEndpointFound(
                         final String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
                     // An endpoint was found!
-                    Log.d(TAG, "The ID: " + endpointId);
+                    for(String id:mVisitedIds){
+                        if(endpointId.equals(id)) return;
+                    }
 
                     String name = "hemanth";
                     Nearby.Connections.requestConnection(
@@ -313,9 +264,9 @@ public class PWMActivity extends Activity implements
                                         @Override
                                         public void onResult(@NonNull Status status) {
                                             if (status.isSuccess()) {
-                                                Log.d(TAG, "Connection Accepted");
+                                                Log.d(TAG, "Asking to accept connection");
                                             } else {
-                                                Log.d(TAG, "Well Shit");
+                                                Log.d(TAG, "Failed to accept connection");
                                             }
                                         }
                                     });
