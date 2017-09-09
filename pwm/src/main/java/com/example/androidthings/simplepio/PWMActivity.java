@@ -17,6 +17,15 @@
 package com.example.androidthings.simplepio;
 
 import android.app.Activity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.SimpleArrayMap;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,27 +37,22 @@ import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
 import com.google.android.gms.nearby.connection.ConnectionResolution;
 import com.google.android.gms.nearby.connection.Connections;
+import com.google.android.gms.nearby.connection.ConnectionsStatusCodes;
 import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
 import com.google.android.gms.nearby.connection.EndpointDiscoveryCallback;
+import com.google.android.gms.nearby.connection.Payload;
+import com.google.android.gms.nearby.connection.PayloadCallback;
+import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.things.pio.PeripheralManagerService;
 import com.google.android.things.pio.Pwm;
-
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.IOException;
 
 /**
  * Sample usage of the PWM API that changes the PWM pulse width at a fixed interval defined in
  * {@link #INTERVAL_BETWEEN_STEPS_MS}.
- *
  */
 public class PWMActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -73,6 +77,10 @@ public class PWMActivity extends Activity implements
     private ConnectionLifecycleCallback mConnectionLC;
     private ConnectivityManager connectivityManager;
 
+    private final SimpleArrayMap<Long, NotificationCompat.Builder> incomingPayloads = new SimpleArrayMap<>();
+    private final SimpleArrayMap<Long, NotificationCompat.Builder> outgoingPayloads = new SimpleArrayMap<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,26 +91,38 @@ public class PWMActivity extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
         mGoogleApiClient.connect();
-        mConnectionLC=new ConnectionLifecycleCallback() {
+        mConnectionLC = new ConnectionLifecycleCallback() {
             @Override
             public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
-                Log.d(TAG,s);
+                Log.d(TAG, s);
+                Log.d(TAG,"Connection Initiated");
+                Nearby.Connections.acceptConnection(
+                        mGoogleApiClient, s, mPayloadCallback);
             }
 
             @Override
             public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
                 Log.d(TAG,s);
+                Log.d(TAG,"Connection Result");
+                switch (connectionResolution.getStatus().getStatusCode()) {
+                    case ConnectionsStatusCodes.STATUS_OK:
+                        // We're connected! Can now start sending and receiving data.
+                        Nearby.Connections.
+                                sendPayload(mGoogleApiClient, s, Payload.fromBytes("Motherfuck".getBytes()));
+                        break;
+                    case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
+                        // The connection was rejected by one or both sides.
+                        break;
+                }
             }
 
             @Override
             public void onDisconnected(String s) {
-                Log.d(TAG,s);
+                Log.d(TAG, s);
             }
         };
 
-        connectivityManager= (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-
-
+        connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
 
         PeripheralManagerService service = new PeripheralManagerService();
@@ -202,7 +222,7 @@ public class PWMActivity extends Activity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(TAG,"API Client connected");
+        Log.d(TAG, "API Client connected");
         startAdvertising();
         startDiscovery();
     }
@@ -225,6 +245,29 @@ public class PWMActivity extends Activity implements
         return (info != null && info.isConnectedOrConnecting()) || (info1 != null && info1.isConnectedOrConnecting());
     }
 
+
+
+    private void sendPayload(String endpointId, Payload payload) {
+        if (payload.getType() == Payload.Type.BYTES) {
+            // No need to track progress for bytes.
+            return;
+        }
+    }
+
+    private final PayloadCallback mPayloadCallback =
+            new PayloadCallback() {
+                @Override
+                public void onPayloadReceived(String endpointId, Payload payload) {
+
+                }
+
+                @Override
+                public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
+
+                }
+            };
+
+
     private void startAdvertising() {
         /*(if (!isConnectedToNetwork()) {
             Log.d(TAG, "startAdvertising: not connected to WiFi network.");
@@ -240,10 +283,10 @@ public class PWMActivity extends Activity implements
                         new ResultCallback<Connections.StartAdvertisingResult>() {
                             @Override
                             public void onResult(@NonNull Connections.StartAdvertisingResult result) {
-                                Log.d(TAG,result.getStatus().getStatus().toString());
+                                Log.d(TAG, result.getStatus().getStatus().toString());
                                 if (result.getStatus().isSuccess()) {
                                     // We're advertising!
-                                    Log.d(TAG,"Starting to advertise");
+                                    Log.d(TAG, "Starting to advertise");
                                 } else {
                                     // We were unable to start advertising.
                                 }
@@ -255,10 +298,29 @@ public class PWMActivity extends Activity implements
             new EndpointDiscoveryCallback() {
                 @Override
                 public void onEndpointFound(
-                        String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
+                        final String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
                     // An endpoint was found!
+                    Log.d(TAG, "The ID: " + endpointId);
 
-                    Log.d(TAG,endpointId);
+                    String name = "hemanth";
+                    Nearby.Connections.requestConnection(
+                            mGoogleApiClient,
+                            name,
+                            endpointId,
+                            mConnectionLC)
+                            .setResultCallback(
+                                    new ResultCallback<Status>() {
+                                        @Override
+                                        public void onResult(@NonNull Status status) {
+                                            if (status.isSuccess()) {
+                                                Log.d(TAG, "Connection Accepted");
+                                            } else {
+                                                Log.d(TAG, "Well Shit");
+                                            }
+                                        }
+                                    });
+
+
                 }
 
                 @Override
@@ -278,7 +340,7 @@ public class PWMActivity extends Activity implements
                             @Override
                             public void onResult(@NonNull Status status) {
                                 if (status.isSuccess()) {
-                                    Log.d(TAG,"Starting Discovery");
+                                    Log.d(TAG, "Starting Discovery");
                                 } else {
                                     // We were unable to start discovering.
                                 }
