@@ -11,9 +11,9 @@ public class BackwardResponse {
     List<MetricBean> metrics;
     String rootId;
 
-    public BackwardResponse(List<MetricBean> metrics, String rootId) {
+    public BackwardResponse(List<MetricBean> metrics) {
         this.metrics = metrics;
-        this.rootId = rootId;
+
     }
 
     public class MetricBean{

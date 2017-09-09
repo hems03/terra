@@ -26,6 +26,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
 
+import com.example.androidthings.simplepio.model.BackwardResponse;
 import com.example.androidthings.simplepio.model.ForwardRequest;
 import com.example.androidthings.simplepio.singleton.Singletons;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,6 +55,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 
@@ -63,6 +66,9 @@ public class PWMActivity extends Activity implements
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
     private String mUUID;
+    private boolean mIsParent=false;
+    private boolean mIsDiscoveryOn=false;
+    private String mParentId;
 
     // Parameters of the servo PWM
     /*private static final double MIN_ACTIVE_PULSE_DURATION_MS = 1;
@@ -82,6 +88,7 @@ public class PWMActivity extends Activity implements
     private GoogleApiClient mGoogleApiClient;
     private ConnectionLifecycleCallback mConnectionLC;
     private ConnectivityManager connectivityManager;
+    private List<BackwardResponse.MetricBean> mChildMetrics;
 
     private final SimpleArrayMap<Long, NotificationCompat.Builder> incomingPayloads = new SimpleArrayMap<>();
     private final SimpleArrayMap<Long, NotificationCompat.Builder> outgoingPayloads = new SimpleArrayMap<>();
@@ -91,6 +98,7 @@ public class PWMActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mVisitedIds=new ArrayList<>();
+        mChildMetrics=new ArrayList<>();
         mDidPing=false;
         mUUID=UUID.randomUUID().toString();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -102,7 +110,6 @@ public class PWMActivity extends Activity implements
         mConnectionLC = new ConnectionLifecycleCallback() {
             @Override
             public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
-                Log.d(TAG, s);
                 Log.d(TAG,"Connection Initiated");
                 Nearby.Connections.acceptConnection(
                         mGoogleApiClient, s, mPayloadCallback);
@@ -110,16 +117,19 @@ public class PWMActivity extends Activity implements
 
             @Override
             public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
-                Log.d(TAG,s);
                 Log.d(TAG,"Connection Result");
                 switch (connectionResolution.getStatus().getStatusCode()) {
                     case ConnectionsStatusCodes.STATUS_OK:
                         // We're connected! Can now start sending and receiving data.
-                        ForwardRequest request=new ForwardRequest(mVisitedIds,mUUID );
+                        if(mIsParent){
+                            ForwardRequest request=new ForwardRequest(mVisitedIds,mUUID );
 
-                        Gson gson=Singletons.getGson();
-                        Nearby.Connections.
-                                sendPayload(mGoogleApiClient, s, Payload.fromBytes(gson.toJson(request).getBytes()) );
+                            Gson gson=Singletons.getGson();
+                            Nearby.Connections.
+                                    sendPayload(mGoogleApiClient, s, Payload.fromBytes(gson.toJson(request).getBytes()) );
+                        }
+                        mIsParent=false;
+
                         break;
                     case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
                         // The connection was rejected by one or both sides.
@@ -194,10 +204,13 @@ public class PWMActivity extends Activity implements
                             case "forward":{
                                 ForwardRequest forwardRequest= Singletons.getGson().fromJson(payloadString,ForwardRequest.class);
                                 mVisitedIds=forwardRequest.getPrevVisited();
+                                mVisitedIds.add(endpointId);
+                                mParentId=endpointId;
                                 startDiscovery();
                             }
                             case "backward":{
-
+                                BackwardResponse backwardResponse=Singletons.getGson().fromJson(payloadString,BackwardResponse.class);
+                                mChildMetrics.addAll(backwardResponse.getMetrics());
                             }
                         }
                     }catch (JSONException e){
@@ -272,11 +285,14 @@ public class PWMActivity extends Activity implements
                                         public void onResult(@NonNull Status status) {
                                             if (status.isSuccess()) {
                                                 Log.d(TAG, "Asking to accept connection");
+                                                mIsParent=true;
                                             } else {
                                                 Log.d(TAG, "Failed to accept connection");
                                             }
                                         }
                                     });
+
+
                     Nearby.Connections.stopDiscovery(mGoogleApiClient);
 
                 }
@@ -299,6 +315,16 @@ public class PWMActivity extends Activity implements
                             public void onResult(@NonNull Status status) {
                                 if (status.isSuccess()) {
                                     Log.d(TAG, "Starting Discovery");
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            Nearby.Connections.stopDiscovery(mGoogleApiClient);
+                                            BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
+                                            String responseText=Singletons.getGson().toJson(backwardResponse);
+                                            Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()));
+                                        }
+                                    },15000
+                                    );
                                 } else {
                                     // We were unable to start discovering.
                                 }
