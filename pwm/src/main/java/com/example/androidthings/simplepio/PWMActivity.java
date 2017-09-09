@@ -115,7 +115,6 @@ public class PWMActivity extends Activity implements
                 switch (connectionResolution.getStatus().getStatusCode()) {
                     case ConnectionsStatusCodes.STATUS_OK:
                         // We're connected! Can now start sending and receiving data.
-                        mVisitedIds.add(s);
                         ForwardRequest request=new ForwardRequest(mVisitedIds,mUUID );
 
                         Gson gson=Singletons.getGson();
@@ -162,7 +161,6 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-
     }
 
     @Override
@@ -187,6 +185,7 @@ public class PWMActivity extends Activity implements
             new PayloadCallback() {
                 @Override
                 public void onPayloadReceived(String endpointId, Payload payload) {
+                    mVisitedIds.add(endpointId);
                     Log.d(TAG,new String(payload.asBytes()));
                     String payloadString=new String(payload.asBytes());
                     try{
@@ -222,8 +221,8 @@ public class PWMActivity extends Activity implements
         }*/
         Nearby.Connections.startAdvertising(
                 mGoogleApiClient,
-                mUUID,
-                mUUID,
+                "test",
+                "test",
                 mConnectionLC,
                 new AdvertisingOptions(Strategy.P2P_STAR))
                 .setResultCallback(
@@ -291,7 +290,7 @@ public class PWMActivity extends Activity implements
     private void startDiscovery() {
         Nearby.Connections.startDiscovery(
                 mGoogleApiClient,
-                "1010",
+                "test",
                 mEndpointDiscoveryCallback,
                 new DiscoveryOptions(Strategy.P2P_STAR))
                 .setResultCallback(
