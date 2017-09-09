@@ -126,7 +126,7 @@ public class PWMActivity extends Activity implements
 
 
         PeripheralManagerService service = new PeripheralManagerService();
-        try {
+        /*(try {
             String pinName = BoardDefaults.getPWMPort();
             mActivePulseDuration = MIN_ACTIVE_PULSE_DURATION_MS;
 
@@ -143,7 +143,7 @@ public class PWMActivity extends Activity implements
             mHandler.post(mChangePWMRunnable);
         } catch (IOException e) {
             Log.e(TAG, "Error on PeripheralIO API", e);
-        }
+        }*/
     }
 
     @Override
@@ -258,7 +258,7 @@ public class PWMActivity extends Activity implements
             new PayloadCallback() {
                 @Override
                 public void onPayloadReceived(String endpointId, Payload payload) {
-
+                    Log.d(TAG,new String(payload.asBytes()));
                 }
 
                 @Override
