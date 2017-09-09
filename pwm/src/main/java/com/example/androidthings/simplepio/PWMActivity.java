@@ -89,7 +89,7 @@ public class PWMActivity extends Activity implements
     private ConnectionLifecycleCallback mConnectionLC;
     private ConnectivityManager connectivityManager;
     private List<BackwardResponse.MetricBean> mChildMetrics;
-
+    private boolean mAllowDiscovery=true;
     private final SimpleArrayMap<Long, NotificationCompat.Builder> incomingPayloads = new SimpleArrayMap<>();
     private final SimpleArrayMap<Long, NotificationCompat.Builder> outgoingPayloads = new SimpleArrayMap<>();
 
@@ -267,11 +267,13 @@ public class PWMActivity extends Activity implements
                 public void onEndpointFound(
                         final String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
                     // An endpoint was found!
-                    if(mDidPing)return;
+
+                    if(mDidPing||!mAllowDiscovery)return;
                     mDidPing=false;
                     for(String id:mVisitedIds){
                         if(endpointId.equals(id)) return;
                     }
+                    mAllowDiscovery=false;
 
                     String name = "hemanth";
                     Nearby.Connections.requestConnection(
