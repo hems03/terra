@@ -47,4 +47,8 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
     compile 'com.google.dagger:dagger-android-support:2.11'
     compile 'com.google.code.gson:gson:2.8.0'
+
+
 }
+
+apply plugin: 'com.google.gms.google-services'

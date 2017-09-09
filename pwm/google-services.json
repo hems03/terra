@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "139639366916",
+    "firebase_url": "https://terra-96b1f.firebaseio.com",
+    "project_id": "terra-96b1f",
+    "storage_bucket": "terra-96b1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139639366916:android:4f180656148e641a",
+        "android_client_info": {
+          "package_name": "com.example.androidthings.simplepio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "139639366916-cd1o84h7c8i2bdp148h875ehuthvs25u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSLXWml5avY4y-XqA6GUpMIJwiFRhWfoo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
