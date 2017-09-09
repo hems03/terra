@@ -54,6 +54,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class PWMActivity extends Activity implements
@@ -61,6 +62,7 @@ public class PWMActivity extends Activity implements
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
+    private String mUUID;
 
     // Parameters of the servo PWM
     /*private static final double MIN_ACTIVE_PULSE_DURATION_MS = 1;
@@ -90,6 +92,7 @@ public class PWMActivity extends Activity implements
         super.onCreate(savedInstanceState);
         mVisitedIds=new ArrayList<>();
         mDidPing=false;
+        mUUID=UUID.randomUUID().toString();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -113,7 +116,7 @@ public class PWMActivity extends Activity implements
                     case ConnectionsStatusCodes.STATUS_OK:
                         // We're connected! Can now start sending and receiving data.
                         mVisitedIds.add(s);
-                        ForwardRequest request=new ForwardRequest(mVisitedIds);
+                        ForwardRequest request=new ForwardRequest(mVisitedIds,mUUID );
 
                         Gson gson=Singletons.getGson();
                         Nearby.Connections.
@@ -159,7 +162,7 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-        startDiscovery();
+
     }
 
     @Override
@@ -219,8 +222,8 @@ public class PWMActivity extends Activity implements
         }*/
         Nearby.Connections.startAdvertising(
                 mGoogleApiClient,
-                "Hello",
-                "1010",
+                mUUID,
+                mUUID,
                 mConnectionLC,
                 new AdvertisingOptions(Strategy.P2P_STAR))
                 .setResultCallback(
@@ -253,7 +256,7 @@ public class PWMActivity extends Activity implements
                         final String endpointId, DiscoveredEndpointInfo discoveredEndpointInfo) {
                     // An endpoint was found!
                     if(mDidPing)return;
-                    mDidPing=!mDidPing;
+                    mDidPing=false;
                     for(String id:mVisitedIds){
                         if(endpointId.equals(id)) return;
                     }
@@ -275,7 +278,7 @@ public class PWMActivity extends Activity implements
                                             }
                                         }
                                     });
-
+                    Nearby.Connections.stopDiscovery(mGoogleApiClient);
 
                 }
 

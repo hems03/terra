@@ -9,6 +9,12 @@ import java.util.List;
 public class BackwardResponse {
     String type="backward";
     List<MetricBean> metrics;
+    String rootId;
+
+    public BackwardResponse(List<MetricBean> metrics, String rootId) {
+        this.metrics = metrics;
+        this.rootId = rootId;
+    }
 
     public class MetricBean{
         String id;
@@ -22,5 +28,9 @@ public class BackwardResponse {
 
     public List<MetricBean> getMetrics() {
         return metrics;
+    }
+
+    public String getRootId() {
+        return rootId;
     }
 }
