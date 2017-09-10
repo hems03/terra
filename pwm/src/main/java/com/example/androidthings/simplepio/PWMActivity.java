@@ -151,7 +151,7 @@ public class PWMActivity extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
         mGoogleApiClient.connect();
-        
+
         mConnectionLC = new ConnectionLifecycleCallback() {
             @Override
             public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
@@ -249,7 +249,7 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-        activity.setBackgroundColor(getResources().getColor(R.color.yellow));
+
 
         if (mIsDiscoveryOn) {
             activity.setBackgroundColor(getResources().getColor(R.color.green));
@@ -333,6 +333,7 @@ public class PWMActivity extends Activity implements
                                 Log.d(TAG, result.getStatus().getStatus().toString());
                                 if (result.getStatus().isSuccess()) {
                                     // We're advertising!
+                                    activity.setBackgroundColor(getResources().getColor(R.color.yellow));
                                     Log.d(TAG, "Starting to advertise");
                                 } else {
                                     // We were unable to start advertising.
