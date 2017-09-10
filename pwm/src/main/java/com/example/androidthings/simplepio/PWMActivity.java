@@ -85,7 +85,7 @@ public class PWMActivity extends Activity implements
     }
     private MoistureSensor mMoistureSensor;
 
-    public static final String DEVICE_ID = "2";
+    public static final String DEVICE_ID = "5";
     private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
@@ -460,7 +460,7 @@ public class PWMActivity extends Activity implements
             } else {
                 moisture = 0.0;
             }
-            //client.addData(bean.id, 0.0, moisture);
+            client.addData(bean.id, 0.0, moisture);
         }
     }
 }
