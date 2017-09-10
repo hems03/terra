@@ -19,9 +19,14 @@ public class BackwardResponse {
     }
 
     public class MetricBean{
-        String id;
-        String data;
-        String metricType;
+        MetricBean(String id, String data, String metricType) {
+            this.id = id;
+            this.data = data;
+            this.metricType = metricType;
+        }
+        public String id;
+        public String data;
+        public String metricType;
     }
 
     public String getType() {
@@ -38,5 +43,9 @@ public class BackwardResponse {
 
     public List<String> getPrevVisited() {
         return prevVisited;
+    }
+
+    public void insertMetricBean(String id, String data, String metricType) {
+        metrics.add(new MetricBean(id, data, metricType));
     }
 }

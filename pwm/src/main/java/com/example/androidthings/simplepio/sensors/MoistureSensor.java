@@ -24,7 +24,7 @@ public class MoistureSensor {
     private Gpio mObstacleSensorGpio;
 
 
-    public void setUpSensor() {
+    public String setUpSensor() {
         PeripheralManagerService service = new PeripheralManagerService();
         Log.d(TAG, "Available GPIOs: " + service.getGpioList());
 
@@ -37,18 +37,12 @@ public class MoistureSensor {
             mObstacleSensorGpio.setActiveType(Gpio.ACTIVE_HIGH);
             // Step 3. Enable edge trigger events.
             // Step 4. Set Active type to LOW, then it will trigger HIGH events
-            Observable.interval(0,1000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Long>() {
-                @Override
-                public void accept(Long aLong) throws Exception {
-                    Log.d(TAG,Boolean.toString(mObstacleSensorGpio.getValue()));
-                }
-            });
-            // Step 5. Register an event callback.
             mObstacleSensorGpio.registerGpioCallback(mCallback);
+            return mObstacleSensorGpio.getValue() + "";
         } catch (IOException e) {
             Log.e(TAG, "Error on sensor", e);
+            return "false";
         }
-
     }
 
 

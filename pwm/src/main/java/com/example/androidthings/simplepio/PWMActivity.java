@@ -82,6 +82,7 @@ public class PWMActivity extends Activity implements
     }
     private MoistureSensor mMoistureSensor;
 
+    public static final String DEVICE_ID = "2";
     private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
@@ -141,7 +142,7 @@ public class PWMActivity extends Activity implements
         TriggerReceiver triggerReceiver = new TriggerReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(triggerReceiver, statusIntentFilter);
         mMoistureSensor=new MoistureSensor();
-        mMoistureSensor.setUpSensor();
+        final String moistureData = mMoistureSensor.setUpSensor();
         activity=findViewById(R.id.activity_pwm);
         init();
         mUUID=UUID.randomUUID().toString();
@@ -201,6 +202,7 @@ public class PWMActivity extends Activity implements
                 Log.d(TAG, "Backpropagating");
                 activity.setBackgroundColor(getResources().getColor(R.color.yellow));
                 BackwardResponse response = new BackwardResponse(mChildMetrics, mVisitedIds);
+                response.insertMetricBean(DEVICE_ID, moistureData, "moisture");
                 String responseText = Singletons.getGson().toJson(response);
                 Nearby.Connections.sendPayload(mGoogleApiClient, s, Payload.fromBytes(responseText.getBytes()))
                         .setResultCallback(new ResultCallback<Status>() {
@@ -434,9 +436,22 @@ public class PWMActivity extends Activity implements
                                     };
                                     new Timer().schedule(mBackPropTimer,10000);
                                 } else {
-
+                                    addDataToServer(mChildMetrics);
                                 }
                             }
                         });
+    }
+
+    public void addDataToServer(List<BackwardResponse.MetricBean> list) {
+        ParentClient client = new ParentClient("https://02bf0a80.ngrok.io");
+        for (BackwardResponse.MetricBean bean : list) {
+            double moisture;
+            if (bean.data.equals("true")) {
+                moisture = 1.0;
+            } else {
+                moisture = 0.0;
+            }
+            //client.addData(bean.id, 0.0, moisture);
+        }
     }
 }
