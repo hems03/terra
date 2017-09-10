@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
+import android.view.View;
 
 import com.example.androidthings.simplepio.model.BackwardResponse;
 import com.example.androidthings.simplepio.model.ForwardRequest;
@@ -48,6 +49,7 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 import com.google.android.things.pio.PeripheralManagerService;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -63,6 +65,7 @@ import java.util.UUID;
 public class PWMActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+    private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
     private String mUUID;
@@ -99,6 +102,9 @@ public class PWMActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pwm);
+        //Log.d(TAG,FirebaseInstanceId.getInstance().getToken());
+        activity=findViewById(R.id.activity_pwm);
         mVisitedIds=new ArrayList<>();
         mChildMetrics=new ArrayList<>();
         mDidPing=false;
@@ -109,6 +115,7 @@ public class PWMActivity extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
         mGoogleApiClient.connect();
+        Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
         mConnectionLC = new ConnectionLifecycleCallback() {
             @Override
             public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
@@ -155,6 +162,7 @@ public class PWMActivity extends Activity implements
             @Override
             public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
                 Log.d(TAG,"Backpropagating");
+                activity.setBackgroundColor(getResources().getColor(R.color.red));
                 BackwardResponse response=new BackwardResponse(mChildMetrics,mVisitedIds);
                 String responseText=Singletons.getGson().toJson(response);
                 Nearby.Connections.sendPayload(mGoogleApiClient,s,Payload.fromBytes(responseText.getBytes()))
@@ -202,7 +210,12 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-        discover();
+//        discover();
+//        activity.setBackgroundColor(getResources().getColor(R.color.green));
+        if (mIsDiscoveryOn){
+            activity.setBackgroundColor(getResources().getColor(R.color.green));
+            discover();
+        }
     }
 
 
@@ -257,6 +270,8 @@ public class PWMActivity extends Activity implements
 
                 @Override
                 public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
+
+
 
                 }
             };
@@ -359,7 +374,7 @@ public class PWMActivity extends Activity implements
                             @Override
                             public void onResult(@NonNull Status status) {
 
-                                if (status.isSuccess()) {
+                                if (status.isSuccess() && mParentId != null) {
                                     Log.d(TAG, "Starting Discovery");
                                     mBackPropTimer=new TimerTask() {
                                         @Override
@@ -386,7 +401,7 @@ public class PWMActivity extends Activity implements
                                     };
                                     new Timer().schedule(mBackPropTimer,12000);
                                 } else {
-                                    // We were unable to start discovering.
+
                                 }
                             }
                         });

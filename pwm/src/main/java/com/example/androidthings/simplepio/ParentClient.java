@@ -10,14 +10,15 @@ import retrofit2.Retrofit;
 
 public class ParentClient {
     Retrofit retrofit;
-    SendData service;
+    SendData dataService;
 
-    public ParentClient(String baseURL) {
-        retrofit = new Retrofit.Builder().baseUrl(baseURL).build();
-        service = retrofit.create(SendData.class);
+    public ParentClient(String dataURL) {
+        retrofit = new Retrofit.Builder().baseUrl(dataURL).build();
+        dataService = retrofit.create(SendData.class);
     }
 
     public void addData(String sensorId, double temperature, double moisture) {
-        service.addData(sensorId, temperature, moisture);
+        dataService.addData(sensorId, temperature, moisture);
     }
+
 }
