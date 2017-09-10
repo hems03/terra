@@ -208,6 +208,7 @@ public class PWMActivity extends Activity implements
                             public void onResult(@NonNull Status status) {
                                 Log.d(TAG,status.toString());
                                 init();
+                                Nearby.Connections.stopDiscovery(mGoogleApiClient);
                             }
                         });
 
