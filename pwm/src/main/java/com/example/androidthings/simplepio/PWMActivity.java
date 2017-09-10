@@ -194,7 +194,7 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-        if (mIsDiscoveryOn)discover();
+        discover();
     }
 
 
