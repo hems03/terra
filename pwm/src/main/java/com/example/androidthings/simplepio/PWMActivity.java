@@ -102,7 +102,7 @@ public class PWMActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwm);
-        activity=findViewById(R.layout.activity_pwm);
+        activity=findViewById(R.id.activity_pwm);
         mVisitedIds=new ArrayList<>();
         mChildMetrics=new ArrayList<>();
         mDidPing=false;
@@ -133,6 +133,7 @@ public class PWMActivity extends Activity implements
                             Gson gson=Singletons.getGson();
                             Nearby.Connections.
                                     sendPayload(mGoogleApiClient, s, Payload.fromBytes(gson.toJson(request).getBytes()) );
+                            activity.setBackgroundColor(getResources().getColor(R.color.red));
                         }
                         mIsParent=false;
 
@@ -159,6 +160,7 @@ public class PWMActivity extends Activity implements
             @Override
             public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
                 Log.d(TAG,"Backpropagating");
+                activity.setBackgroundColor(getResources().getColor(R.color.yellow));
                 BackwardResponse response=new BackwardResponse(mChildMetrics,mVisitedIds);
                 String responseText=Singletons.getGson().toJson(response);
                 Nearby.Connections.sendPayload(mGoogleApiClient,s,Payload.fromBytes(responseText.getBytes()))
@@ -206,6 +208,7 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
+        activity.setBackgroundColor(getResources().getColor(R.color.yellow));
         if (mIsDiscoveryOn){
             activity.setBackgroundColor(getResources().getColor(R.color.green));
             discover();
@@ -373,7 +376,7 @@ public class PWMActivity extends Activity implements
                                     mBackPropTimer=new TimerTask() {
                                         @Override
                                         public void run() {
-                                            activity.setBackgroundColor(getResources().getColor(R.color.red));
+
                                             Nearby.Connections.stopDiscovery(mGoogleApiClient);
                                             Nearby.Connections.requestConnection(
                                                     mGoogleApiClient,
