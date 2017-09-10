@@ -37,6 +37,7 @@ import com.example.androidthings.simplepio.firebase.RecieveMessage;
 import com.example.androidthings.simplepio.model.BackwardResponse;
 import com.example.androidthings.simplepio.model.ForwardRequest;
 import com.example.androidthings.simplepio.networking.SendData;
+import com.example.androidthings.simplepio.sensors.MoistureSensor;
 import com.example.androidthings.simplepio.singleton.Singletons;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -73,13 +74,13 @@ import java.util.UUID;
 public class PWMActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-
     public class TriggerReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             discover();
         }
     }
+    private MoistureSensor mMoistureSensor;
 
     private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
@@ -129,7 +130,13 @@ public class PWMActivity extends Activity implements
                 RecieveMessage.TRIGGER);
         TriggerReceiver triggerReceiver = new TriggerReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(triggerReceiver, statusIntentFilter);
-
+        mMoistureSensor=new MoistureSensor();
+        mMoistureSensor.setUpSensor();
+        activity=findViewById(R.id.activity_pwm);
+        mVisitedIds=new ArrayList<>();
+        mChildMetrics=new ArrayList<>();
+        mDidPing=false;
+        mUUID=UUID.randomUUID().toString();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -211,6 +218,7 @@ public class PWMActivity extends Activity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMoistureSensor.destroy();
     }
 
     @Override
