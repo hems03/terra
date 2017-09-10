@@ -78,7 +78,9 @@ public class PWMActivity extends Activity implements
     public class TriggerReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            startDiscovery();
+            init();
+            discover();
+            Log.d(TAG,"es triggered");
         }
     }
     private MoistureSensor mMoistureSensor;
@@ -125,6 +127,10 @@ public class PWMActivity extends Activity implements
         mVisitedIds=new ArrayList<>();
         mChildMetrics=new ArrayList<>();
         mAllowDiscovery=true;
+        if (mGoogleApiClient != null) {
+            Nearby.Connections.stopDiscovery(mGoogleApiClient);
+        }
+
     }
 
     @Override
@@ -132,9 +138,6 @@ public class PWMActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwm);
         activity = findViewById(R.id.activity_pwm);
-        mVisitedIds = new ArrayList<>();
-        mChildMetrics = new ArrayList<>();
-        mDidPing = false;
         mUUID = UUID.randomUUID().toString();
         try {
             Log.d("kuwehw", FirebaseInstanceId.getInstance().getToken());
@@ -329,6 +332,7 @@ public class PWMActivity extends Activity implements
                 mGoogleApiClient,
                 "test",
                 "test",
+
                 mConnectionLC,
                 new AdvertisingOptions(Strategy.P2P_STAR))
                 .setResultCallback(
