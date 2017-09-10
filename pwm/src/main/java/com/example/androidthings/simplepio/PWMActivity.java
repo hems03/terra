@@ -86,8 +86,8 @@ public class PWMActivity extends Activity implements
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
     private String mUUID;
-    private boolean mIsParent = false;
-    private boolean mIsDiscoveryOn = false;
+    private boolean mIsParent;
+    private boolean mIsDiscoveryOn;
     private String mParentId;
     private TimerTask mBackPropTimer;
 
@@ -116,6 +116,16 @@ public class PWMActivity extends Activity implements
     private final SimpleArrayMap<Long, NotificationCompat.Builder> outgoingPayloads = new SimpleArrayMap<>();
 
 
+    private void init(){
+        mIsDiscoveryOn=false;
+        mIsParent=false;
+        mParentId=null;
+        mDidPing=false;
+        mVisitedIds=new ArrayList<>();
+        mChildMetrics=new ArrayList<>();
+        mAllowDiscovery=true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,9 +143,7 @@ public class PWMActivity extends Activity implements
         mMoistureSensor=new MoistureSensor();
         mMoistureSensor.setUpSensor();
         activity=findViewById(R.id.activity_pwm);
-        mVisitedIds=new ArrayList<>();
-        mChildMetrics=new ArrayList<>();
-        mDidPing=false;
+        init();
         mUUID=UUID.randomUUID().toString();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -198,9 +206,11 @@ public class PWMActivity extends Activity implements
                         .setResultCallback(new ResultCallback<Status>() {
                             @Override
                             public void onResult(@NonNull Status status) {
-                                Log.d(TAG, status.toString());
+                                Log.d(TAG,status.toString());
+                                init();
                             }
                         });
+
             }
 
             @Override
@@ -420,7 +430,7 @@ public class PWMActivity extends Activity implements
                                                             });
                                         }
                                     };
-                                    new Timer().schedule(mBackPropTimer, 12000);
+                                    new Timer().schedule(mBackPropTimer,10000);
                                 } else {
 
                                 }
