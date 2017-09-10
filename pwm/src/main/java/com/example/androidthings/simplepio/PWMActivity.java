@@ -29,6 +29,7 @@ import android.view.View;
 
 import com.example.androidthings.simplepio.model.BackwardResponse;
 import com.example.androidthings.simplepio.model.ForwardRequest;
+import com.example.androidthings.simplepio.sensors.MoistureSensor;
 import com.example.androidthings.simplepio.singleton.Singletons;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -64,6 +65,10 @@ import java.util.UUID;
 public class PWMActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+    private MoistureSensor mMoistureSensor;
+
+
+
     private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
@@ -112,6 +117,8 @@ public class PWMActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwm);
+        mMoistureSensor=new MoistureSensor();
+        mMoistureSensor.setUpSensor();
         activity=findViewById(R.id.activity_pwm);
         init();
         mUUID=UUID.randomUUID().toString();
@@ -198,6 +205,7 @@ public class PWMActivity extends Activity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMoistureSensor.destroy();
     }
 
     @Override
