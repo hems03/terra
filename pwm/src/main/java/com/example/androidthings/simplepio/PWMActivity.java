@@ -69,6 +69,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 
 public class PWMActivity extends Activity implements
@@ -77,7 +78,7 @@ public class PWMActivity extends Activity implements
     public class TriggerReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            discover();
+            startDiscovery();
         }
     }
     private MoistureSensor mMoistureSensor;
@@ -135,7 +136,11 @@ public class PWMActivity extends Activity implements
         mChildMetrics = new ArrayList<>();
         mDidPing = false;
         mUUID = UUID.randomUUID().toString();
-
+        try {
+            Log.d("kuwehw", FirebaseInstanceId.getInstance().getToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         IntentFilter statusIntentFilter = new IntentFilter(
                 RecieveMessage.TRIGGER);
         TriggerReceiver triggerReceiver = new TriggerReceiver();
@@ -253,7 +258,6 @@ public class PWMActivity extends Activity implements
 
 
         if (mIsDiscoveryOn) {
-            activity.setBackgroundColor(getResources().getColor(R.color.green));
             discover();
         }
     }
@@ -409,6 +413,7 @@ public class PWMActivity extends Activity implements
 
                                 if (status.isSuccess() && mParentId != null) {
                                     Log.d(TAG, "Starting Discovery");
+                                    activity.setBackgroundColor(getResources().getColor(R.color.green));
                                     mBackPropTimer = new TimerTask() {
                                         @Override
                                         public void run() {
