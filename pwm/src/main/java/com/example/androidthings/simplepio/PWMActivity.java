@@ -202,20 +202,16 @@ public class PWMActivity extends Activity implements
                     String payloadString=new String(payload.asBytes());
                     try{
                         JSONObject jsonObject=new JSONObject(payloadString);
-                        switch (jsonObject.getString("type")){
-                            case "forward":{
-                                ForwardRequest forwardRequest= Singletons.getGson().fromJson(payloadString,ForwardRequest.class);
-                                mVisitedIds=forwardRequest.getPrevVisited();
-                                mVisitedIds.add(endpointId);
-                                mParentId=endpointId;
-                                startDiscovery();
-                                break;
-                            }
-                            case "backward":{
-                                BackwardResponse backwardResponse=Singletons.getGson().fromJson(payloadString,BackwardResponse.class);
-                                mChildMetrics.addAll(backwardResponse.getMetrics());
-                                break;
-                            }
+                        String type=jsonObject.getString("type");
+                        if(type.equals("forward")){
+                            ForwardRequest forwardRequest= Singletons.getGson().fromJson(payloadString,ForwardRequest.class);
+                            mVisitedIds=forwardRequest.getPrevVisited();
+                            mVisitedIds.add(endpointId);
+                            mParentId=endpointId;
+                            startDiscovery();
+                        }else if (type.equals("backward")){
+                            BackwardResponse backwardResponse=Singletons.getGson().fromJson(payloadString,BackwardResponse.class);
+                            mChildMetrics.addAll(backwardResponse.getMetrics());
                         }
                     }catch (JSONException e){
                         Log.d(TAG,e.getLocalizedMessage());
