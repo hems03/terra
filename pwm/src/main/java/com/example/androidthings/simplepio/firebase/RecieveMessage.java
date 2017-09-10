@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+
 public class RecieveMessage extends FirebaseMessagingService {
     public static final String TRIGGER="TRIGGER";
     public RecieveMessage() {

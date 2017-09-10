@@ -151,7 +151,7 @@ public class PWMActivity extends Activity implements
                 .addApi(Nearby.CONNECTIONS_API)
                 .build();
         mGoogleApiClient.connect();
-        Log.d("TOKEN", FirebaseInstanceId.getInstance().getToken());
+        
         mConnectionLC = new ConnectionLifecycleCallback() {
             @Override
             public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
