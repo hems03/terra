@@ -69,6 +69,7 @@ public class PWMActivity extends Activity implements
     private boolean mIsParent=false;
     private boolean mIsDiscoveryOn=false;
     private String mParentId;
+    private TimerTask mBackPropTimer;
 
     // Parameters of the servo PWM
     /*private static final double MIN_ACTIVE_PULSE_DURATION_MS = 1;
@@ -276,6 +277,7 @@ public class PWMActivity extends Activity implements
                     mAllowDiscovery=false;
 
                     String name = "hemanth";
+                    if(mBackPropTimer!=null)mBackPropTimer.cancel();
                     Nearby.Connections.requestConnection(
                             mGoogleApiClient,
                             name,
@@ -325,16 +327,16 @@ public class PWMActivity extends Activity implements
 
                                 if (status.isSuccess()) {
                                     Log.d(TAG, "Starting Discovery");
-                                    new Timer().schedule(new TimerTask() {
-                                                             @Override
-                                                             public void run() {
-                                                                 Nearby.Connections.stopDiscovery(mGoogleApiClient);
-                                                                 BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
-                                                                 String responseText=Singletons.getGson().toJson(backwardResponse);
-                                                                 Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()));
-                                                             }
-                                                         },15000
-                                    );
+                                    mBackPropTimer=new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            Nearby.Connections.stopDiscovery(mGoogleApiClient);
+                                            BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
+                                            String responseText=Singletons.getGson().toJson(backwardResponse);
+                                            Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()));
+                                        }
+                                    };
+                                    new Timer().schedule(mBackPropTimer,15000);
                                 } else {
                                     // We were unable to start discovering.
                                 }
