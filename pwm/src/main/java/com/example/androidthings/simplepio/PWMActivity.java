@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
+import android.view.View;
 
 import com.example.androidthings.simplepio.model.BackwardResponse;
 import com.example.androidthings.simplepio.model.ForwardRequest;
@@ -63,6 +64,7 @@ import java.util.UUID;
 public class PWMActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+    private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
     private String mUUID;
@@ -99,6 +101,8 @@ public class PWMActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pwm);
+        activity=findViewById(R.layout.activity_pwm);
         mVisitedIds=new ArrayList<>();
         mChildMetrics=new ArrayList<>();
         mDidPing=false;
@@ -202,7 +206,10 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
-        if (mIsDiscoveryOn)discover();
+        if (mIsDiscoveryOn){
+            activity.setBackgroundColor(getResources().getColor(R.color.green));
+            discover();
+        }
     }
 
 
@@ -257,6 +264,8 @@ public class PWMActivity extends Activity implements
 
                 @Override
                 public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
+
+
 
                 }
             };
@@ -364,6 +373,7 @@ public class PWMActivity extends Activity implements
                                     mBackPropTimer=new TimerTask() {
                                         @Override
                                         public void run() {
+                                            activity.setBackgroundColor(getResources().getColor(R.color.red));
                                             Nearby.Connections.stopDiscovery(mGoogleApiClient);
                                             Nearby.Connections.requestConnection(
                                                     mGoogleApiClient,
