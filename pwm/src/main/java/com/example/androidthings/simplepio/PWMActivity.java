@@ -88,6 +88,7 @@ public class PWMActivity extends Activity implements
 
     private GoogleApiClient mGoogleApiClient;
     private ConnectionLifecycleCallback mConnectionLC;
+    private ConnectionLifecycleCallback mBackwardLC;
     private ConnectivityManager connectivityManager;
     private List<BackwardResponse.MetricBean> mChildMetrics;
     private boolean mAllowDiscovery=true;
@@ -140,25 +141,30 @@ public class PWMActivity extends Activity implements
 
             @Override
             public void onDisconnected(String s) {
-                Nearby.Connections.requestConnection(
-                        mGoogleApiClient,
-                        "hemanth",
-                        s,
-                        mConnectionLC)
-                        .setResultCallback(
-                                new ResultCallback<Status>() {
-                                    @Override
-                                    public void onResult(@NonNull Status status) {
-                                        if (status.isSuccess()) {
-                                            Log.d(TAG, "Asking to reconnect");
-                                            mIsParent=true;
-                                        } else {
-                                            Log.d(TAG, "Failed to reconnect");
-                                        }
-                                    }
-                                });
+
             }
         };
+
+        mBackwardLC=new ConnectionLifecycleCallback() {
+            @Override
+            public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
+                BackwardResponse response=new BackwardResponse(mChildMetrics);
+                String responseText=Singletons.getGson().toJson(response);
+                Nearby.Connections.sendPayload(mGoogleApiClient,s,Payload.fromBytes(responseText.getBytes()));
+            }
+
+            @Override
+            public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
+
+            }
+
+            @Override
+            public void onDisconnected(String s) {
+
+            }
+        };
+
+
 
         connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         PeripheralManagerService service = new PeripheralManagerService();
@@ -194,12 +200,12 @@ public class PWMActivity extends Activity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        mGoogleApiClient.connect();
+
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mGoogleApiClient.connect();
+
     }
 
     private boolean isConnectedToNetwork() {
@@ -351,16 +357,26 @@ public class PWMActivity extends Activity implements
                                             Nearby.Connections.stopDiscovery(mGoogleApiClient);
                                             BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
                                             String responseText=Singletons.getGson().toJson(backwardResponse);
-                                            Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()))
-                                                    .setResultCallback(new ResultCallback<Status>() {
-                                                        @Override
-                                                        public void onResult(@NonNull Status status) {
-                                                            Log.d(TAG,status.toString());
-                                                        }
-                                                    });
+                                            Nearby.Connections.requestConnection(
+                                                    mGoogleApiClient,
+                                                    "hemanth",
+                                                    mParentId,
+                                                    mConnectionLC)
+                                                    .setResultCallback(
+                                                            new ResultCallback<Status>() {
+                                                                @Override
+                                                                public void onResult(@NonNull Status status) {
+                                                                    if (status.isSuccess()) {
+                                                                        Log.d(TAG, "Asking to reconnect");
+                                                                        mIsParent=true;
+                                                                    } else {
+                                                                        Log.d(TAG, "Failed to reconnect");
+                                                                    }
+                                                                }
+                                                            });
                                         }
                                     };
-                                    new Timer().schedule(mBackPropTimer,15000);
+                                    new Timer().schedule(mBackPropTimer,12000);
                                 } else {
                                     // We were unable to start discovering.
                                 }
