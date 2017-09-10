@@ -171,16 +171,18 @@ public class PWMActivity extends Activity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "API Client connected");
         startAdvertising();
+        if (mIsDiscoveryOn)discover();
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        mGoogleApiClient.connect();
     }
 
     private boolean isConnectedToNetwork() {
@@ -207,10 +209,12 @@ public class PWMActivity extends Activity implements
                                 mVisitedIds.add(endpointId);
                                 mParentId=endpointId;
                                 startDiscovery();
+                                break;
                             }
                             case "backward":{
                                 BackwardResponse backwardResponse=Singletons.getGson().fromJson(payloadString,BackwardResponse.class);
                                 mChildMetrics.addAll(backwardResponse.getMetrics());
+                                break;
                             }
                         }
                     }catch (JSONException e){
@@ -306,6 +310,13 @@ public class PWMActivity extends Activity implements
             };
 
     private void startDiscovery() {
+        Log.d(TAG,"Google Api Client Status: "+mGoogleApiClient.isConnected());
+        mGoogleApiClient.disconnect();
+        mIsDiscoveryOn=true;
+        mGoogleApiClient.connect();
+    }
+
+    private void discover(){
         Nearby.Connections.startDiscovery(
                 mGoogleApiClient,
                 "test",
@@ -315,17 +326,18 @@ public class PWMActivity extends Activity implements
                         new ResultCallback<Status>() {
                             @Override
                             public void onResult(@NonNull Status status) {
+
                                 if (status.isSuccess()) {
                                     Log.d(TAG, "Starting Discovery");
                                     new Timer().schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            Nearby.Connections.stopDiscovery(mGoogleApiClient);
-                                            BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
-                                            String responseText=Singletons.getGson().toJson(backwardResponse);
-                                            Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()));
-                                        }
-                                    },15000
+                                                             @Override
+                                                             public void run() {
+                                                                 Nearby.Connections.stopDiscovery(mGoogleApiClient);
+                                                                 BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
+                                                                 String responseText=Singletons.getGson().toJson(backwardResponse);
+                                                                 Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()));
+                                                             }
+                                                         },15000
                                     );
                                 } else {
                                     // We were unable to start discovering.
