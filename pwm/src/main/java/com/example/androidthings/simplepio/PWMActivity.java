@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -208,7 +209,7 @@ public class PWMActivity extends Activity implements
             @Override
             public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
                 Log.d(TAG, "Backpropagating");
-                activity.setBackgroundColor(getResources().getColor(R.color.yellow));
+
                 BackwardResponse response = new BackwardResponse(mChildMetrics, mVisitedIds);
                 response.insertMetricBean(DEVICE_ID, moistureData, "moisture");
                 String responseText = Singletons.getGson().toJson(response);
@@ -218,7 +219,7 @@ public class PWMActivity extends Activity implements
                             public void onResult(@NonNull Status status) {
                                 Log.d(TAG,status.toString());
                                 init();
-                                Nearby.Connections.stopDiscovery(mGoogleApiClient);
+
                             }
                         });
 
@@ -417,35 +418,48 @@ public class PWMActivity extends Activity implements
                             @Override
                             public void onResult(@NonNull Status status) {
 
-                                if (status.isSuccess() && mParentId != null) {
+                                if (status.isSuccess()) {
                                     Log.d(TAG, "Starting Discovery");
                                     activity.setBackgroundColor(getResources().getColor(R.color.green));
+                                    final Handler handler=new Handler();
+                                    final Runnable runnable=new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            activity.setBackgroundColor(getResources().getColor(R.color.yellow));
+                                        }
+                                    };
+
                                     mBackPropTimer = new TimerTask() {
                                         @Override
                                         public void run() {
                                             Nearby.Connections.stopDiscovery(mGoogleApiClient);
-                                            Nearby.Connections.requestConnection(
-                                                    mGoogleApiClient,
-                                                    "hemanth",
-                                                    mParentId,
-                                                    mBackwardLC)
-                                                    .setResultCallback(
-                                                            new ResultCallback<Status>() {
-                                                                @Override
-                                                                public void onResult(@NonNull Status status) {
-                                                                    if (status.isSuccess()) {
-                                                                        Log.d(TAG, "Asking to reconnect");
-                                                                        mIsParent = true;
-                                                                    } else {
-                                                                        Log.d(TAG, "Failed to reconnect");
+                                            handler.post(runnable);
+                                            if(mParentId!=null){
+                                                Nearby.Connections.requestConnection(
+                                                        mGoogleApiClient,
+                                                        "hemanth",
+                                                        mParentId,
+                                                        mBackwardLC)
+                                                        .setResultCallback(
+                                                                new ResultCallback<Status>() {
+                                                                    @Override
+                                                                    public void onResult(@NonNull Status status) {
+                                                                        if (status.isSuccess()) {
+                                                                            Log.d(TAG, "Asking to reconnect");
+                                                                            mIsParent = true;
+                                                                        } else {
+                                                                            Log.d(TAG, "Failed to reconnect");
+                                                                        }
                                                                     }
-                                                                }
-                                                            });
+                                                                });
+                                            }else{
+                                                addDataToServer(mChildMetrics);
+                                            }
                                         }
                                     };
                                     new Timer().schedule(mBackPropTimer,10000);
                                 } else {
-                                    addDataToServer(mChildMetrics);
+
                                 }
                             }
                         });
