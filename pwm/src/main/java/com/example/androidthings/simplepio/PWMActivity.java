@@ -140,7 +140,23 @@ public class PWMActivity extends Activity implements
 
             @Override
             public void onDisconnected(String s) {
-                Log.d(TAG, s);
+                Nearby.Connections.requestConnection(
+                        mGoogleApiClient,
+                        "hemanth",
+                        s,
+                        mConnectionLC)
+                        .setResultCallback(
+                                new ResultCallback<Status>() {
+                                    @Override
+                                    public void onResult(@NonNull Status status) {
+                                        if (status.isSuccess()) {
+                                            Log.d(TAG, "Asking to reconnect");
+                                            mIsParent=true;
+                                        } else {
+                                            Log.d(TAG, "Failed to reconnect");
+                                        }
+                                    }
+                                });
             }
         };
 
@@ -211,7 +227,9 @@ public class PWMActivity extends Activity implements
                             mParentId=endpointId;
                             startDiscovery();
                         }else if (type.equals("backward")){
+
                             BackwardResponse backwardResponse=Singletons.getGson().fromJson(payloadString,BackwardResponse.class);
+                            Log.d(TAG,"Going back");
                             mChildMetrics.addAll(backwardResponse.getMetrics());
                         }
                     }catch (JSONException e){
@@ -333,7 +351,13 @@ public class PWMActivity extends Activity implements
                                             Nearby.Connections.stopDiscovery(mGoogleApiClient);
                                             BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
                                             String responseText=Singletons.getGson().toJson(backwardResponse);
-                                            Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()));
+                                            Nearby.Connections.sendPayload(mGoogleApiClient,mParentId,Payload.fromBytes(responseText.getBytes()))
+                                                    .setResultCallback(new ResultCallback<Status>() {
+                                                        @Override
+                                                        public void onResult(@NonNull Status status) {
+                                                            Log.d(TAG,status.toString());
+                                                        }
+                                                    });
                                         }
                                     };
                                     new Timer().schedule(mBackPropTimer,15000);
