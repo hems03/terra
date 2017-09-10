@@ -1,6 +1,10 @@
 package com.example.androidthings.simplepio.networking;
 
+import com.example.androidthings.simplepio.model.MetricRequest;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.POST;
 
@@ -9,6 +13,6 @@ import retrofit2.http.POST;
  */
 
 public interface SendData {
-    @POST("/sensordata")
-    Call<String> addData (@Field("sensor_id") String sensor_id, @Field("temperature") double temperature, @Field("moisture") double moisture);
+    @POST("/sensordata/")
+    Call<ResponseBody> addData (@Body MetricRequest metricRequest);
 }
