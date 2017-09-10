@@ -69,6 +69,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 
 public class PWMActivity extends Activity implements
@@ -77,7 +78,9 @@ public class PWMActivity extends Activity implements
     public class TriggerReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            init();
             discover();
+            Log.d(TAG,"es triggered");
         }
     }
     private MoistureSensor mMoistureSensor;
@@ -125,6 +128,10 @@ public class PWMActivity extends Activity implements
         mVisitedIds=new ArrayList<>();
         mChildMetrics=new ArrayList<>();
         mAllowDiscovery=true;
+        if (mGoogleApiClient != null) {
+            Nearby.Connections.stopDiscovery(mGoogleApiClient);
+        }
+
     }
 
     @Override
@@ -132,11 +139,12 @@ public class PWMActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwm);
         activity = findViewById(R.id.activity_pwm);
-        mVisitedIds = new ArrayList<>();
-        mChildMetrics = new ArrayList<>();
-        mDidPing = false;
         mUUID = UUID.randomUUID().toString();
-
+        try {
+            Log.d("kuwehw", FirebaseInstanceId.getInstance().getToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         IntentFilter statusIntentFilter = new IntentFilter(
                 RecieveMessage.TRIGGER);
         TriggerReceiver triggerReceiver = new TriggerReceiver();
@@ -255,7 +263,6 @@ public class PWMActivity extends Activity implements
 
 
         if (mIsDiscoveryOn) {
-            activity.setBackgroundColor(getResources().getColor(R.color.green));
             discover();
         }
     }
@@ -327,6 +334,7 @@ public class PWMActivity extends Activity implements
                 mGoogleApiClient,
                 "test",
                 "test",
+
                 mConnectionLC,
                 new AdvertisingOptions(Strategy.P2P_STAR))
                 .setResultCallback(
@@ -411,6 +419,7 @@ public class PWMActivity extends Activity implements
 
                                 if (status.isSuccess() && mParentId != null) {
                                     Log.d(TAG, "Starting Discovery");
+                                    activity.setBackgroundColor(getResources().getColor(R.color.green));
                                     mBackPropTimer = new TimerTask() {
                                         @Override
                                         public void run() {
