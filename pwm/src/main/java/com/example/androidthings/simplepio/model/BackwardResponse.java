@@ -10,9 +10,11 @@ public class BackwardResponse {
     String type="backward";
     List<MetricBean> metrics;
     String rootId;
+    List<String>prevVisited;
 
-    public BackwardResponse(List<MetricBean> metrics) {
+    public BackwardResponse(List<MetricBean> metrics,List<String> prevVisited) {
         this.metrics = metrics;
+        this.prevVisited=prevVisited;
 
     }
 
@@ -32,5 +34,9 @@ public class BackwardResponse {
 
     public String getRootId() {
         return rootId;
+    }
+
+    public List<String> getPrevVisited() {
+        return prevVisited;
     }
 }

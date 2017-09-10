@@ -148,14 +148,22 @@ public class PWMActivity extends Activity implements
         mBackwardLC=new ConnectionLifecycleCallback() {
             @Override
             public void onConnectionInitiated(String s, ConnectionInfo connectionInfo) {
-                BackwardResponse response=new BackwardResponse(mChildMetrics);
-                String responseText=Singletons.getGson().toJson(response);
-                Nearby.Connections.sendPayload(mGoogleApiClient,s,Payload.fromBytes(responseText.getBytes()));
+                Nearby.Connections.acceptConnection(
+                        mGoogleApiClient, s,mPayloadCallback);
             }
 
             @Override
             public void onConnectionResult(String s, ConnectionResolution connectionResolution) {
-
+                Log.d(TAG,"Backpropagating");
+                BackwardResponse response=new BackwardResponse(mChildMetrics,mVisitedIds);
+                String responseText=Singletons.getGson().toJson(response);
+                Nearby.Connections.sendPayload(mGoogleApiClient,s,Payload.fromBytes(responseText.getBytes()))
+                        .setResultCallback(new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(@NonNull Status status) {
+                                Log.d(TAG,status.toString());
+                            }
+                        });
             }
 
             @Override
@@ -233,10 +241,12 @@ public class PWMActivity extends Activity implements
                             mParentId=endpointId;
                             startDiscovery();
                         }else if (type.equals("backward")){
-
                             BackwardResponse backwardResponse=Singletons.getGson().fromJson(payloadString,BackwardResponse.class);
+                            mVisitedIds.addAll(backwardResponse.getPrevVisited());
                             Log.d(TAG,"Going back");
                             mChildMetrics.addAll(backwardResponse.getMetrics());
+
+                            startDiscovery();
                         }
                     }catch (JSONException e){
                         Log.d(TAG,e.getLocalizedMessage());
@@ -355,13 +365,11 @@ public class PWMActivity extends Activity implements
                                         @Override
                                         public void run() {
                                             Nearby.Connections.stopDiscovery(mGoogleApiClient);
-                                            BackwardResponse backwardResponse=new BackwardResponse(mChildMetrics);
-                                            String responseText=Singletons.getGson().toJson(backwardResponse);
                                             Nearby.Connections.requestConnection(
                                                     mGoogleApiClient,
                                                     "hemanth",
                                                     mParentId,
-                                                    mConnectionLC)
+                                                    mBackwardLC)
                                                     .setResultCallback(
                                                             new ResultCallback<Status>() {
                                                                 @Override
