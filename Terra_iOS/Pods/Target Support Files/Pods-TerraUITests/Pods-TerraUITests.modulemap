@@ -1,0 +1,6 @@
+framework module Pods_TerraUITests {
+  umbrella header "Pods-TerraUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

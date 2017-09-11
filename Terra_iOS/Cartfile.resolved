@@ -1,0 +1,4 @@
+github "Alamofire/Alamofire" "4.5.1"
+github "Hearst-DD/ObjectMapper" "2.2.8"
+github "danielgindi/Charts" "v3.0.3"
+github "tristanhimmelman/AlamofireObjectMapper" "4.1.0"

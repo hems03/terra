@@ -1,0 +1,6 @@
+framework module Pods_Terra {
+  umbrella header "Pods-Terra-umbrella.h"
+
+  export *
+  module * { export * }
+}
