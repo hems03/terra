@@ -1,10 +1,8 @@
 package com.example.hemanth.terra_android
 
 import android.app.Application
-import com.example.hemanth.DiasporaAndroid.Dagger.app.AppModule
-import com.example.hemanth.DiasporaAndroid.Dagger.app.ApplicationComponent
-import com.example.hemanth.DiasporaAndroid.Dagger.app.DaggerApplicationComponent
-import com.example.hemanth.DiasporaAndroid.Dagger.service.ServiceModule
+
+import com.example.hemanth.terra_android.dagger.app.ApplicationComponent
 import kotlin.properties.Delegates
 
 /**
@@ -17,12 +15,9 @@ import kotlin.properties.Delegates
         super.onCreate()
     }
 
-    fun getApplicationComponent(): ApplicationComponent{
+    fun getApplicationComponent(): ApplicationComponent {
         if (mApplicationComponent == null) {
-            mApplicationComponent = DaggerApplicationComponent.builder()
-                    .appModule(AppModule(this))
-                    .serviceModule(ServiceModule())
-                    .build()
+
         }
         return mApplicationComponent
 

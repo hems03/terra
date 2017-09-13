@@ -1,9 +1,10 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.app
+package com.example.hemanth.terra_android.dagger.app
 
-import com.example.hemanth.DiasporaAndroid.Dagger.controller.ControllerComponent
-import com.example.hemanth.DiasporaAndroid.Dagger.controller.ControllerModule
-import com.example.hemanth.DiasporaAndroid.Dagger.controller.ViewMvcModule
-import com.example.hemanth.DiasporaAndroid.Dagger.service.ServiceModule
+
+import com.example.hemanth.terra_android.dagger.controller.ControllerComponent
+import com.example.hemanth.terra_android.dagger.controller.ControllerModule
+import com.example.hemanth.terra_android.dagger.controller.ViewMvcModule
+import com.example.hemanth.terra_android.dagger.service.ServiceModule
 import dagger.Component
 import javax.inject.Singleton
 

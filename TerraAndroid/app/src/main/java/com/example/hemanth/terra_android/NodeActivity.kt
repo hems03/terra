@@ -1,19 +1,31 @@
 package com.example.hemanth.terra_android
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.example.hemanth.terra_android.common.BaseActivity
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
+import kotlinx.android.synthetic.main.activity_node.*
 import javax.inject.Inject
+import kotlin.properties.Delegates
+import android.support.v4.content.LocalBroadcastManager
+import com.example.hemanth.terra_android.NodeActivity.TriggerReceiver
+import com.example.hemanth.terra_android.firebase.FirebaseService.TRIGGER
+import android.content.IntentFilter
 
-class NodeActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks {
+
+
+class NodeActivity : BaseActivity() {
     val TAG = "NodeActivity"
 
-    @Inject
-    lateinit var _googleApiClient: GoogleApiClient
+
+
+
+    private var viewModel:ThingViewModel by Delegates.notNull()
 
     inner class TriggerReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -25,17 +37,26 @@ class NodeActivity : BaseActivity(), GoogleApiClient.ConnectionCallbacks {
         getControllerComponent().inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_node)
-        _googleApiClient.registerConnectionCallbacks(this)
-        _googleApiClient.registerConnectionFailedListener {
-            _googleApiClient.connect()
+        viewModel=ViewModelProviders.of(this).get(ThingViewModel::class.java)
+        viewModel.init()
+        viewModel.getMyState().observeForever {
+            if(it!=null){
+                if(it.isDiscovering){
+                    activity_node.setBackgroundColor(resources.getColor(R.color.green))
+                }else if (it.isChildrenTraversing){
+                    activity_node.setBackgroundColor(resources.getColor(R.color.yellow))
+                }else if (it.isAdvertising){
+                    activity_node.setBackgroundColor(resources.getColor(R.color.red))
+                }else{
+                    activity_node.setBackgroundColor(resources.getColor(R.color.colorAccent))
+                }
+            }
         }
+
+        val statusIntentFilter = IntentFilter(
+                "TRIGGER")
+        val triggerReceiver = TriggerReceiver()
+        LocalBroadcastManager.getInstance(this).registerReceiver(triggerReceiver, statusIntentFilter)
     }
 
-    override fun onConnected(p0: Bundle?) {
-        Log.d(TAG, "Google API Client connected")
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-        Log.d(TAG, "Google API Client suspended")
-    }
 }

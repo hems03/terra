@@ -1,4 +1,4 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.service
+package com.example.hemanth.terra_android.dagger.service
 
 import android.content.Context
 import com.example.hemanth.terra_android.retrofit.TerraService
@@ -48,9 +48,13 @@ class ServiceModule() {
 
     @Provides
     @Singleton
-    fun googleApiClient(context: Context, gso: GoogleSignInOptions): GoogleApiClient {
+    fun googleApiClient(context: Context): GoogleApiClient {
         return GoogleApiClient.Builder(context)
                 .addApi(Nearby.CONNECTIONS_API)
                 .build()
     }
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.service
+package com.example.hemanth.terra_android.dagger.service
 
 import dagger.Subcomponent
 

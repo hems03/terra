@@ -9,12 +9,11 @@ import java.util.UUID;
 
 public class ForwardRequest {
     String type="forward";
-    String uuid;
     List<String>prevVisited;
 
-    public ForwardRequest( List<String> prevVisited,String uuid) {
+    public ForwardRequest( List<String> prevVisited) {
         this.prevVisited = prevVisited;
-        this.uuid=uuid;
+
     }
 
     public String getType() {
@@ -25,7 +24,5 @@ public class ForwardRequest {
         return prevVisited;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
+
 }

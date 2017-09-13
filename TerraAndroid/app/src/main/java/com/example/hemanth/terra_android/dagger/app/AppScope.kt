@@ -1,4 +1,4 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.app
+package com.example.hemanth.terra_android.dagger.app
 
 /**
  * Created by hemanth on 8/28/17.

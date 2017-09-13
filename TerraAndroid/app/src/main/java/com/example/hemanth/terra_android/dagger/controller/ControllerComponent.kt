@@ -1,6 +1,5 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.controller
+package com.example.hemanth.terra_android.dagger.controller
 
-import com.example.hemanth.DiasporaAndroid.*
 import com.example.hemanth.terra_android.NodeActivity
 import dagger.Subcomponent
 

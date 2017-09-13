@@ -2,10 +2,11 @@ package com.example.hemanth.terra_android.common
 
 import android.support.annotation.UiThread
 import android.support.v7.app.AppCompatActivity
-import com.example.hemanth.DiasporaAndroid.Dagger.controller.ControllerComponent
-import com.example.hemanth.DiasporaAndroid.Dagger.controller.ControllerModule
-import com.example.hemanth.DiasporaAndroid.Dagger.controller.ViewMvcModule
+
 import com.example.hemanth.terra_android.App
+import com.example.hemanth.terra_android.dagger.controller.ControllerComponent
+import com.example.hemanth.terra_android.dagger.controller.ControllerModule
+import com.example.hemanth.terra_android.dagger.controller.ViewMvcModule
 import com.example.hemanth.terra_android.retrofit.TerraService
 import javax.inject.Inject
 

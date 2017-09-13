@@ -1,4 +1,4 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.controller
+package com.example.hemanth.terra_android.dagger.controller
 
 import android.content.Context
 import android.view.LayoutInflater

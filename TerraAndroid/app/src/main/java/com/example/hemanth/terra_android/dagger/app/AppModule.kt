@@ -1,4 +1,4 @@
-package com.example.hemanth.DiasporaAndroid.Dagger.app
+package com.example.hemanth.terra_android.dagger.app
 
 import android.app.Application
 import android.content.Context
