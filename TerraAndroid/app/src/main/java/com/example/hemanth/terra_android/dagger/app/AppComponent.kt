@@ -5,6 +5,7 @@ import com.example.hemanth.terra_android.dagger.controller.ControllerComponent
 import com.example.hemanth.terra_android.dagger.controller.ControllerModule
 import com.example.hemanth.terra_android.dagger.controller.ViewMvcModule
 import com.example.hemanth.terra_android.dagger.service.ServiceModule
+import com.example.hemanth.terra_android.dagger.viewmodel.ViewModelComponent
 import dagger.Component
 import javax.inject.Singleton
 
@@ -21,4 +22,6 @@ interface ApplicationComponent {
     fun newControllerComponent(
             controllerModule: ControllerModule,
             viewMvcModule: ViewMvcModule): ControllerComponent
+
+
 }

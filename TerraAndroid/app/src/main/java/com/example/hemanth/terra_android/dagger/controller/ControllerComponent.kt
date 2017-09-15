@@ -1,6 +1,7 @@
 package com.example.hemanth.terra_android.dagger.controller
 
 import com.example.hemanth.terra_android.NodeActivity
+import com.example.hemanth.terra_android.ThingViewModel
 import dagger.Subcomponent
 
 /**
@@ -12,5 +13,8 @@ import dagger.Subcomponent
 interface ControllerComponent {
 
     fun inject(exampleActivity: NodeActivity)
+
+    fun inject(viewModel:ThingViewModel)
+
 
 }

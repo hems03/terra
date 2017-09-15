@@ -28,7 +28,8 @@
         </service>
 
 
-        <activity android:name=".NodeActivity">
+        <activity android:name=".NodeActivity" android:theme="@style/AppTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

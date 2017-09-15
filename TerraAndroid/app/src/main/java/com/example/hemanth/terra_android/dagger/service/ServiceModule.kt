@@ -19,7 +19,7 @@ import javax.inject.Singleton
  */
 @Module
 class ServiceModule() {
-    val BASE_URL = ""
+    val BASE_URL = "https://02bf0a80.ngrok.io"
 
 
     @Provides
