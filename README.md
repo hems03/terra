@@ -4,7 +4,7 @@ Nowadays everyone is using data to make better smarter decisions. But in many ca
 ## Our Inspiration
 We noticed that any sensory network can be modeled as a mathematical graph with nodes being sensor and edges showing what nodes can connect wirelessly. Of course, some sensors are a significant distance away, but as long as the graph is a fully connected graph. We theorized data can be sent along this mesh until it is delivered to a HOME node which can upload the data to a server.
 
-##How We Built Terra
+## How We Built Terra
 All of our sensors were NXP i.MX7 dev boards which we flashed **Android Things** onto. Using **Android Nearby** we were able to communicate to relatively near sensors and pass data. Using those two as our basis we implement a modified **Depth Frist Traversal** (DFT) originating from the home node so that as the traversal propagated back we would send the data with it.
 
 We triggered this DFT using an **iOS app** on an iPad with **Firebase** which communicated to the HOME node/sensor. The HOME node/sensor would then send the data to our **Django** server which stores it using **SQLite**. We then pull the data to our app for the user(Farm) to see what the readings of the
