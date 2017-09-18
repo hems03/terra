@@ -16,7 +16,11 @@ import com.example.hemanth.terra_android.NodeActivity.TriggerReceiver
 import com.example.hemanth.terra_android.firebase.FirebaseService.TRIGGER
 import android.content.IntentFilter
 import com.example.hemanth.terra_android.dagger.viewmodel.MyViewModelFactory
+import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_node.*
+import com.google.firebase.iid.FirebaseInstanceId
+
+
 
 
 class NodeActivity : BaseActivity() {
@@ -28,6 +32,8 @@ class NodeActivity : BaseActivity() {
     inner class TriggerReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.d(TAG, "Traversal triggered")
+            viewModel.init()
+            viewModel.startDiscovery()
         }
     }
 
@@ -35,7 +41,14 @@ class NodeActivity : BaseActivity() {
         getControllerComponent().inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_node)
+        FirebaseApp.initializeApp(this)
         viewModel = ViewModelProviders.of(this, MyViewModelFactory(application as App)).get(ThingViewModel::class.java)
+
+        try {
+            Log.d(TAG, FirebaseInstanceId.getInstance().token)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
 
 

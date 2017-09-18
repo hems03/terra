@@ -26,6 +26,11 @@ import com.example.hemanth.terra_android.dagger.viewmodel.ViewModelComponent
 import com.google.android.gms.nearby.connection.Connections
 import com.google.android.gms.nearby.connection.Strategy.P2P_STAR
 import com.google.android.gms.nearby.connection.AdvertisingOptions
+import android.content.ContentValues.TAG
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.support.v4.content.LocalBroadcastManager
 
 
 /**
@@ -44,11 +49,16 @@ class ThingViewModel : ViewModel(), ViewModelComponent.Injectable, GoogleApiClie
     @Inject
     lateinit var _gson: Gson
 
+
+
     override fun inject(component: ViewModelComponent) {
         component.inject(this)
         Log.d(TAG,"Injecting into view model")
         init()
     }
+
+
+
 
     class State(ad:Boolean,disc:Boolean,child:Boolean) {
         var isAdvertising = false
@@ -87,6 +97,7 @@ class ThingViewModel : ViewModel(), ViewModelComponent.Injectable, GoogleApiClie
         }
         _googleApiClient.connect()
         _traversalState = TraversalState.CHILD
+
     }
 
 

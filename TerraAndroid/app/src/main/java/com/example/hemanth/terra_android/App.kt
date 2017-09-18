@@ -8,6 +8,7 @@ import com.example.hemanth.terra_android.dagger.app.DaggerApplicationComponent
 import com.example.hemanth.terra_android.dagger.service.ServiceModule
 import com.example.hemanth.terra_android.dagger.viewmodel.DaggerViewModelComponent
 import com.example.hemanth.terra_android.dagger.viewmodel.ViewModelComponent
+import com.google.firebase.FirebaseApp
 import kotlin.properties.Delegates
 
 /**
@@ -19,6 +20,7 @@ import kotlin.properties.Delegates
 
     override fun onCreate() {
         super.onCreate()
+
     }
 
     fun getApplicationComponent(): ApplicationComponent {
