@@ -1,3 +1,6 @@
+![Screenshot](Terra Graph.png)
+
+
 ## The Problem
 Nowadays everyone is using data to make better smarter decisions. But in many cases, data must be collected across large areas of land that have little to no wired/wireless infrastructure. We looked specifically at farming and came up with a peer to peer sensor communication system which can run **without** wide ranging Wi-Fi or cellular data.
 
