@@ -1,4 +1,4 @@
-![Screenshot](Terra Graph.png)
+![Terra Graph](https://drive.google.com/file/d/0B3b6Yn0t1KO_eXlUd1o2QTFGdlE/view?usp=sharing)
 
 
 ## The Problem
