@@ -1,4 +1,4 @@
-![Terra Graph Picture](Terra Graph.png)
+![Terra Graph](https://github.com/shashank135sharma/terra/blob/master/Terra%20Graph.png "Representation of a Terra Graph")
 
 ## Video Demo: https://drive.google.com/file/d/0B7u4AK42WIUuMUJmNU5STGd5V1E/view?usp=sharing
 
