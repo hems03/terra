@@ -1,4 +1,4 @@
-![GitHub Logo](/Terra Graph.png)
+![Terra Graph Picture](/Terra Graph.png)
 
 ## Video Demo: https://drive.google.com/file/d/0B7u4AK42WIUuMUJmNU5STGd5V1E/view?usp=sharing
 
