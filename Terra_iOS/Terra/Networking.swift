@@ -42,37 +42,6 @@ class Networking{
         }
     }
    
-    class func getWeatherData(completionHandler: @escaping(String) -> ()){
-        let headers : HTTPHeaders = [
-            "Ocp-Apim-Subscription-Key" : "de2956de741c4daa971abc12bc7fa6aa"
-        ]
-        
-        Alamofire.request("https://earthnetworks.azure-api.net/data/forecasts/v1/daily?subscription-key=&locationtype=latitudelongitude&location=39.9526,-75.1652&verbose=false", method: .get, encoding: URLEncoding.default, headers: headers).responseJSON{
-            
-            response in
-            //print(response)
-            //to get status code
-            if let status = response.response?.statusCode {
-                switch(status){
-                case 201:
-                    print("example success")
-                default:
-                    print("error with response status: \(status)")
-                }
-            }
-            //to get JSON return value
-            if let result = response.result.value {
-                let JSONs = result as! NSDictionary
-                let JSONArray = JSONs["dfp"] as! [NSDictionary]
-                let JSONdic = JSONArray[0]
-                print(JSONdic)
-                let forecast = (JSONdic["dd"]!) as! String
-                completionHandler(forecast)
-            }
-            
-        }
-      //  "https://earthnetworks.azure-api.net/data/forecasts/v1/daily?subscription-key=&locationtype=latitudelongitude&location=39.9526,-75.1652&verbose=false"
-    }
     
 }
 

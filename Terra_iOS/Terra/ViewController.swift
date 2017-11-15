@@ -35,11 +35,7 @@ class ViewController: UIViewController {
         
         //comment
         moistureNumbers = [0.0, 1.0, 0.0, 1.0, 0.0]
-        Networking.getWeatherData(completionHandler: {
-            response in
-            self.weatherForecast = response
-            print(self.weatherForecast)
-        })
+        
 
     }
     
