@@ -16,19 +16,25 @@
 
 package com.example.androidthings.simplepio;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.Manifest.permission;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.SimpleArrayMap;
 import android.util.Log;
@@ -86,7 +92,7 @@ public class PWMActivity extends Activity implements
     }
     private MoistureSensor mMoistureSensor;
 
-    public static final String DEVICE_ID = "2";
+    public static final String DEVICE_ID = "1";
     private View activity;
     private static final String TAG = PWMActivity.class.getSimpleName();
     private List<String> mVisitedIds;
@@ -110,7 +116,7 @@ public class PWMActivity extends Activity implements
     private boolean mIsPulseIncreasing = true;
     private double mActivePulseDuration;*/
     private boolean mDidPing;
-
+    private String moistureData;
     private GoogleApiClient mGoogleApiClient;
     private ConnectionLifecycleCallback mConnectionLC;
     private ConnectionLifecycleCallback mBackwardLC;
@@ -135,10 +141,41 @@ public class PWMActivity extends Activity implements
 
     }
 
+    private void requestPermissions(){
+        if (ContextCompat.checkSelfPermission(this,
+                permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    permission.INTERNET)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{permission.INTERNET},
+                        4
+                        );
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pwm);
+        requestPermissions();
         activity = findViewById(R.id.activity_pwm);
         mUUID = UUID.randomUUID().toString();
         try {
@@ -146,12 +183,13 @@ public class PWMActivity extends Activity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.d(TAG," "+(ContextCompat.checkSelfPermission(this, permission.INTERNET)==PackageManager.PERMISSION_GRANTED));
         IntentFilter statusIntentFilter = new IntentFilter(
                 RecieveMessage.TRIGGER);
         TriggerReceiver triggerReceiver = new TriggerReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(triggerReceiver, statusIntentFilter);
         mMoistureSensor=new MoistureSensor();
-        final String moistureData = mMoistureSensor.setUpSensor();
+        moistureData = mMoistureSensor.setUpSensor();
         activity=findViewById(R.id.activity_pwm);
         init();
         mUUID=UUID.randomUUID().toString();
@@ -230,6 +268,7 @@ public class PWMActivity extends Activity implements
 
             }
         };
+
 
 
         connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -453,6 +492,7 @@ public class PWMActivity extends Activity implements
                                                                     }
                                                                 });
                                             }else{
+                                                mChildMetrics.add(new BackwardResponse.MetricBean(DEVICE_ID, moistureData, "moisture"));
                                                 addDataToServer(mChildMetrics);
                                             }
                                         }
@@ -466,7 +506,7 @@ public class PWMActivity extends Activity implements
     }
 
     public void addDataToServer(List<BackwardResponse.MetricBean> list) {
-        ParentClient client = new ParentClient("https://02bf0a80.ngrok.io");
+        ParentClient client = new ParentClient("http://ec2-34-229-134-93.compute-1.amazonaws.com");
         for (BackwardResponse.MetricBean bean : list) {
             double moisture;
             if (bean.data.equals("true")) {
@@ -474,7 +514,7 @@ public class PWMActivity extends Activity implements
             } else {
                 moisture = 0.0;
             }
-            //client.addData(bean.id, 0.0, moisture);
+            client.addData(bean.id, 0.0, moisture);
         }
     }
 }

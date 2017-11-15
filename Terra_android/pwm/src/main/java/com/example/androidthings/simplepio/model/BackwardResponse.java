@@ -18,8 +18,8 @@ public class BackwardResponse {
 
     }
 
-    public class MetricBean{
-        MetricBean(String id, String data, String metricType) {
+    public static class MetricBean{
+        public MetricBean(String id, String data, String metricType) {
             this.id = id;
             this.data = data;
             this.metricType = metricType;
