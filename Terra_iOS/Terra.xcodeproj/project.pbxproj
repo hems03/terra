@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0DD4A55682A97372B41136CF /* Pods_Terra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 626FD61699893D22734A410F /* Pods_Terra.framework */; };
 		21CCE8098D1EAE07B918556D /* Pods_TerraUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DC4D9D0CB2B8C96FA4DCDB /* Pods_TerraUITests.framework */; };
 		982BCFD91F646EBB005288D0 /* iPadStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 982BCFD81F646EBB005288D0 /* iPadStoryboard.storyboard */; };
 		983365681F6459960016EF66 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983365671F6459960016EF66 /* AppDelegate.swift */; };
@@ -116,7 +115,6 @@
 				98A16E591F65016E006D3852 /* Charts.framework in Frameworks */,
 				98750A3D1F64C2AB002B2680 /* AlamofireObjectMapper.framework in Frameworks */,
 				98750A351F64B574002B2680 /* Alamofire.framework in Frameworks */,
-				0DD4A55682A97372B41136CF /* Pods_Terra.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
