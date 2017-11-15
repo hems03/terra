@@ -1,0 +1,9 @@
+{
+  "commitish" : "32ebe5c9166e542548aa53db77599b97ffd0667a",
+  "iOS" : [
+    {
+      "hash" : "fcf425535064d34f271a0e8aaccfe7911a34c8e78efe7692c27cea7549343e85",
+      "name" : "AlamofireSwiftyJSON"
+    }
+  ]
+}
