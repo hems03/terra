@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/aditya/.android/build-cache/a7cdc1ceda8fcbf7e2b6726b63866c0c07df50d8/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="eb305d2ec1f85a4122c5e9d0412c87e20dac20f8">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10/classes_bf8204344c7e5140bdba06e0a503e5ef489c278c/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/c465d18ff82493c4facc676329c5ad02c2bd1bc3/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_3593551f576268856292c5269da6eec048de6f34.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/.android/build-cache/6dba46028cc6de7d68f6561b47fca4a135c2e99b/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4119ea97a7191ff9b8f33b534ea220448f62f491">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10/classes_9ad779e712da66529b29f9abedd43c2facb51ce5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.jakewharton.retrofit/retrofit2-rxjava2-adapter/1.0.0/e117362a2103f8ec01091ebd2f40aca4e1ada599/retrofit2-rxjava2-adapter-1.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e117362a2103f8ec01091ebd2f40aca4e1ada599">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10/retrofit2-rxjava2-adapter-1.0.0_3a9282e46cedeb5291bc74e915912a5081984451/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/io.reactivex.rxjava2/rxjava/2.1.0/2fdf84dedcaaeabb9d70cde9dbb8aad4eccb80a1/rxjava-2.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2fdf84dedcaaeabb9d70cde9dbb8aad4eccb80a1">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10/rxjava-2.1.0_de0c74f8e3444115abe12819b685c26133bc4456/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.0/c4ba5371a29ac9b2ad6129b1d39ea38750043eff/gson-2.8.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c4ba5371a29ac9b2ad6129b1d39ea38750043eff">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/gson-2.8.0_202827f2a60b90c0b2a0bf85664027e13429cbc4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/84e6c101f2dad1a7c2d996be5ddb065e225f1b5c/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_53674badf6d9adbeeb8eee6353c47ffc8568e75c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/9fd2a6fa66ff1ad66fc44dbd285239d26efa087d/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_e224f73df67077399bc1a3b553448db8ef18b268.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/6975da39a7040257bd51d21a231b76c915872d38/javax.inject-1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6975da39a7040257bd51d21a231b76c915872d38">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/javax.inject-1_7cffc86de68f7e1f4b1bbf4c773e905b452075e7.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/Documents/Projects/Github/terra/Terra_android/pwm/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="582c3607cffe8575f0619a44918dad2a3538f8be">
+        <dex dex="/home/aditya/Documents/Projects/Github/terra/Terra_android/pwm/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_a08b84f2b11aa6307f9beb0dce9c53d2debacb2f/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/732e15ef48a6c6a75c126fd2f7ea83706c93b8b0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e5b429c146094a612134910688d169ec08deeefb">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_115a35dcd45238807ed85377d892a2d9c30245af.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/b8ba35e674085342d2985185f0c67c8eff41871e/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f47f4d5bdfd7d7bf330945b8a7ccce4ab437a710">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_c5861dfce678b30016e8f82b08dd8890b80e1307.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/26d7a9d4f227c3538b364bcaf06397a7bcc642a0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2430e711762a749feb00b3d64858ca4768251b9d">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_32f2254000ff803a29923abd739a9caf89d13aff.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/bfa2862e7a8e7b1d01be24960823606b6d5e60c8/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_affbc5b93a5d755d7c7d66214bd39f13fcb0f362.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.0/14b8c877d98005ba3941c9257cfe09f6ed0e0d74/reactive-streams-1.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="14b8c877d98005ba3941c9257cfe09f6ed0e0d74">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10/reactive-streams-1.0.0_77d0baad18d26e2f4aa168be43b59b3fa92e24c8/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.2.0/support-annotations-25.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/support-annotations-25.2.0_a266de4aa70e7d98a21c8555bbce8def6eb6db74.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/8182a354619b76a37695864d1ac21cee17e367bc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2c379c235d7983201bb83edfc3c60bb0dafb5805">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_e1ffde35f24edb71308c1a6780f3e3cdc6f71ab3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/65105392cfaf39ae7b19ef8dd05f804fb99ac82c/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ed87ccdcb70c17d71ba4e6e4ac16afa62d3c49fb">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_d3aa77b776f565ef3cc986d648d56a64bb725006.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.3.0/bcacde6a8ccedcc56c127403d26b76072fe6214d/retrofit-2.3.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bcacde6a8ccedcc56c127403d26b76072fe6214d">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/retrofit-2.3.0_da19ad0bf2ac0f6e75dc40a33436546a5df77d8b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/6aacdce2bc1ce454d5ca85504f5cd8ab22156bfc/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d29714cc76b38157e3cbd034c66e1ec808eb4c19">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_dc2fa54bb34e09dc70810e9331ac2f13a8d39015.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/c606df49faaaab09ad16f362bd3f0271734980a4/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="53a420cd4f49274db6bd43475f8006ba67ef6bbd">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_b5a2602e7dac6fdfb43930c838a3aff7d043adc6.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/Documents/Projects/Github/terra/Terra_android/pwm/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/aditya/Documents/Projects/Github/terra/Terra_android/pwm/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_4207a3ed9db31970484b5eccafc76d487324223c/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/c6ad6a36b5fc77cdae26dc2b80b605b9557e740b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_10d191810797ab193e4af63a7cc7a93a41413316.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a9283170b7305c8d92d25aff02a6ab7e45d06cbe">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/okio-1.13.0_a1255e1ab1eed94f7e662508e9541484840b96f2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/1aadc4750a7b0e04002886fe597586e5a60c859f/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="43e9789bd3240271265ab30ce1be9f224843f5a8">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_b5550b52606d9b801f24f8aa7d09ef3c52e0a845.jar" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="81b3ea32076f2ee53af36eeaa69bdce3ef423f68">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c86d1952f8ace1099a32b380a7ff84d4aac89e5a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/converter-gson/2.3.0/9e09011e9767bb76b5e27c9b8223476b93b14631/converter-gson-2.3.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9e09011e9767bb76b5e27c9b8223476b93b14631">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10/converter-gson-2.3.0_d6e30d12a365dcd995820d1a71fce955a1c7eca3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_48e4e23c81ca6b4e6fa06a77c89cd88150e0b7cd/classes.dex" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/24d029677375684551f2c5ad8951fff517525c86/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e1625e48a836779b5fa141d22e5d05563aaccc9a">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_d07337f21b6e5767cfde74659ad60a7d6d4e5cff.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.8.0/5a11f020cce2d11eb71ba916700600e18c4547e7/okhttp-3.8.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5a11f020cce2d11eb71ba916700600e18c4547e7">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/okhttp-3.8.0_a8e87aa17feea7b66606f958e58ed60e82f10403.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/Android/Sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.2/constraint-layout-solver-1.0.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/constraint-layout-solver-1.0.2_59fbe64b160689a653672d4fdedc171588292481.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/d2e4394f116679576c7e402762cf6cc4dc93bdf0/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_0eca0893a98cffe06de08360d3124e301fba5274.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/c7c1ffdb9abcd70a9d0641f3e00b870b3d9d9391/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_d7c9a8ed559264ae6d09b9def1c5e30fc7b8ba12.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/d30b96c8a696401d0c63a64d3c0fb57d1122b98b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_158c958b67be2b47a3b361470279e3ff8b37a90e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/f3fef360c5f23d685dfee011235c9106e31f5ab6/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c9d0866780279a3ad22052ac35d18eeb0474a770">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_f9df405385606b11ff0a7319f7376fd72868c95d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/a17405d6adc8c8f71bee5efd788450a70b7b0a8b/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_afd56907d0e53de46b0dd8270062c599099fb402.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.1/f7be08ec23c21485b9b5a1cf1654c2ec8c58168d/jsr305-3.0.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f7be08ec23c21485b9b5a1cf1654c2ec8c58168d">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/jsr305-3.0.1_551d46dedd7d8267063958a2782dd48d8c5eeac4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.gradle/caches/modules-2/files-2.1/com.google.dagger/dagger/2.11/95037eaee68aa48021511972e9db9ba29916e1c9/dagger-2.11.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="95037eaee68aa48021511972e9db9ba29916e1c9">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/dagger-2.11_a4d6fda18a3becd626c0e6259948a2e14c5fce1c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/7408c811134529f5d52350452e5693d840b65caa/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_e4c09809818f72ccee8b82f4edbb5777cd516f50.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/home/aditya/.android/build-cache/b96b6a5a132992c18dff921eeceda5fe767f3835/output/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bb43b5199a1065f0f0581ebce14b46b99b9c20f9">
+        <dex dex="/home/aditya/AndroidStudioProjects/terra/pwm/build/intermediates/pre-dexed/debug/classes_e09c7b296da1bcef83916e7c1ce301a6b5f538f6.jar" />
+    </item>
+
+</items>
