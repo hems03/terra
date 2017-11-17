@@ -43,9 +43,12 @@ class ViewController: UIViewController {
         print("Activating sensors")
         //make this get larger
         UIView.setAnimationRepeatAutoreverses(true)
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.5) { () -> Void in
             sender.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         }
+        UIView.animate(withDuration: 0.5, delay: 0.45, options: UIViewAnimationOptions.curveEaseIn, animations: { () -> Void in
+            sender.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2.0)
+        }, completion: nil)
         sender.layer.removeAllAnimations()
         Networking.triggerAction()
     }
@@ -65,7 +68,7 @@ class ViewController: UIViewController {
                         sensorData.printSensorData()
                         
                         if let sensorId = sensorData.sensor_id{
-                            if sensorId == "2"{
+                            if sensorId == "1"{
                                 self.moistureNumbers.append(sensorData.moisture!)
                             }
                         }
